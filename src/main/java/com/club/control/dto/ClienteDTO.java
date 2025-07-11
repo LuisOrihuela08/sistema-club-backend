@@ -1,7 +1,10 @@
 package com.club.control.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public class ClienteDTO {
 
+	@Schema(accessMode = Schema.AccessMode.READ_ONLY)//Esto oculta el id métodos POST y PUT
 	private Long id;
 	private String name;
 	private String lastName;
