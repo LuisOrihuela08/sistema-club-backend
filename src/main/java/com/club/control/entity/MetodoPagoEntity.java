@@ -1,9 +1,12 @@
 package com.club.control.entity;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -14,7 +17,10 @@ public class MetodoPagoEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-		
+	
+	@OneToMany(mappedBy = "metodo")
+	private List<ClientePiscinaEntity> clientePiscina;
+	
 	public MetodoPagoEntity() {
 		super();
 	}

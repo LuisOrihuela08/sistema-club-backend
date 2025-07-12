@@ -1,10 +1,15 @@
 package com.club.control.entity;
 
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -21,6 +26,9 @@ public class ClienteEntity {
 	private String district;
 	private String telephone;
 	
+	@OneToMany(mappedBy = "cliente")
+	@JsonIgnore
+	private List<ClientePiscinaEntity> clientePiscina;
 	
 	public ClienteEntity() {
 		super();

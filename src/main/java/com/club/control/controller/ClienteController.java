@@ -17,7 +17,7 @@ import com.club.control.service.ClienteService;
 @RequestMapping("/api/v1/cliente")
 public class ClienteController {
 	
-	public final ClienteService clienteService;
+	private final ClienteService clienteService;
 	
 	public ClienteController (ClienteService clienteService) {
 		this.clienteService = clienteService;
