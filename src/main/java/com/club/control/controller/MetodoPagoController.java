@@ -21,7 +21,7 @@ import com.club.control.service.MetodoPagoService;
 @RequestMapping("/api/v1/metodo-pago")
 public class MetodoPagoController {
 
-	public final MetodoPagoService metodoPagoService;
+	private final MetodoPagoService metodoPagoService;
 	
 	public MetodoPagoController(MetodoPagoService metodoPagoService) {
 		this.metodoPagoService = metodoPagoService;
