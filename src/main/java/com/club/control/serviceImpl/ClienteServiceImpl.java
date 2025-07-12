@@ -86,4 +86,27 @@ public class ClienteServiceImpl implements ClienteService {
 		// TODO Auto-generated method stub
 
 	}
+
+	@Override
+	public ClienteDTO updateClient(Long id, ClienteDTO clienteDTO) {
+		
+		if (id == null) {
+			throw new IllegalArgumentException("El id no puede ser nulo");
+		} else if (id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser igual o menor a 0");
+		}
+		
+		ClienteEntity entity = clienteRepository.findById(id).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("No se encontro el cliente con el id: " + id);
+		});
+		
+		entity.setName(clienteDTO.getName());
+		entity.setLastName(clienteDTO.getLastName());
+		entity.setTelephone(clienteDTO.getTelephone());
+		entity.setDistrict(clienteDTO.getDistrict());
+		entity.setDni(clienteDTO.getDni());
+		
+		ClienteEntity clienteSaved = clienteRepository.save(entity);
+		return ClienteMapper.toDto(clienteSaved);
+	}
 }

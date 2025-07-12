@@ -7,6 +7,7 @@ import com.club.control.dto.ClienteDTO;
 public interface ClienteService {
 	
 	ClienteDTO saveClient (ClienteDTO clienteDTO);
+	ClienteDTO updateClient (Long id, ClienteDTO clienteDTO);
 	ClienteDTO getClientById (Long id);
 	ClienteDTO getClientByDni (String dni);
 	List<ClienteDTO> listClients();
