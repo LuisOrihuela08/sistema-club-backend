@@ -24,6 +24,9 @@ public class MetodoPagoEntity {
 	@OneToMany(mappedBy = "metodoPago")
 	private List<ClienteBungalowEntity> clienteBungalow;
 	
+	@OneToMany(mappedBy = "metodoPago")
+	private List<ClienteHospedajeEntity> clienteHospedaje;
+	
 	public MetodoPagoEntity() {
 		super();
 	}

@@ -1,5 +1,6 @@
 package com.club.control.dto;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -10,7 +11,7 @@ public class ClienteBungalowDTO {
 
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)//Esto oculta el id métodos POST y PUT para Swagger
 	private Long id;
-	private double montoTotal;
+	private BigDecimal montoTotal;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate fechaInicio;
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
@@ -26,10 +27,11 @@ public class ClienteBungalowDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public double getMontoTotal() {
+	
+	public BigDecimal getMontoTotal() {
 		return montoTotal;
 	}
-	public void setMontoTotal(double montoTotal) {
+	public void setMontoTotal(BigDecimal montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 	public LocalDate getFechaInicio() {

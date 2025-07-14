@@ -1,5 +1,6 @@
 package com.club.control.entity;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -29,8 +30,8 @@ public class ClientePiscinaEntity {
 	@Column(name = "cantidad_personas")
 	private int cantidadPersonas;
 	
-	@Column(name = "monto_total")
-	private double montoTotal;
+	@Column(name = "monto_total", precision = 10, scale = 2)
+	private BigDecimal montoTotal;
 	
 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate fecha;
@@ -47,7 +48,7 @@ public class ClientePiscinaEntity {
 		super();
 	}
 
-	public ClientePiscinaEntity(double precioUnitario, int cantidadPersonas, double montoTotal, LocalDate fecha,
+	public ClientePiscinaEntity(double precioUnitario, int cantidadPersonas, BigDecimal montoTotal, LocalDate fecha,
 			ClienteEntity cliente, MetodoPagoEntity metodo) {
 		super();
 		this.precioUnitario = precioUnitario;
@@ -82,11 +83,11 @@ public class ClientePiscinaEntity {
 		this.cantidadPersonas = cantidadPersonas;
 	}
 
-	public double getMontoTotal() {
+	public BigDecimal getMontoTotal() {
 		return montoTotal;
 	}
 
-	public void setMontoTotal(double montoTotal) {
+	public void setMontoTotal(BigDecimal montoTotal) {
 		this.montoTotal = montoTotal;
 	}
 
