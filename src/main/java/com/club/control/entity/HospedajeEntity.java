@@ -1,5 +1,7 @@
 package com.club.control.entity;
 
+import java.util.List;
+
 import com.club.control.enums.TipoHabitacion;
 
 import jakarta.persistence.Column;
@@ -9,6 +11,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 
 @Entity
@@ -29,6 +32,9 @@ public class HospedajeEntity {
 	@Enumerated(EnumType.STRING)//Esto guarda como String los tipos en la bd y no los guarda enumerados
 	@Column(name = "tipo_habitacion")
 	private TipoHabitacion tipoHabitacion;
+	
+	@OneToMany(mappedBy = "hospedaje")
+	private List<ClienteHospedajeEntity> clienteHospedaje;
 	
 	
 	public HospedajeEntity() {

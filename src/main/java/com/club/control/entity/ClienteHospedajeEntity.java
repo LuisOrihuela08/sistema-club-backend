@@ -3,9 +3,6 @@ package com.club.control.entity;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -17,52 +14,48 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name = "servicio_bungalow")
-public class ClienteBungalowEntity {
+@Table(name = "servicio_hospedaje")
+public class ClienteHospedajeEntity {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	@Column(name = "monto_total", precision = 10, scale = 2)
-	private BigDecimal montoTotal;
-	
 	@Column(name = "fecha_inicio")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate fechaInicio;
 	
 	@Column(name = "fecha_fin")
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
 	private LocalDate fechaFin;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@Column(name = "monto_total", precision = 10, scale = 2)
+	private BigDecimal montoTotal;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "cliente_id")
 	private ClienteEntity cliente;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "bungalow_id")
-	private BungalowEntity bungalow;
+	@JoinColumn(name = "hospedaje_id")
+	private HospedajeEntity hospedaje;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "metodo_pago_id")
 	private MetodoPagoEntity metodoPago;
 	
-	public ClienteBungalowEntity() {
+	public ClienteHospedajeEntity() {
 		super();
 	}
-	
 
-	public ClienteBungalowEntity(BigDecimal montoTotal, LocalDate fechaInicio, LocalDate fechaFin,
-			ClienteEntity cliente, BungalowEntity bungalow, MetodoPagoEntity metodoPago) {
+	public ClienteHospedajeEntity(LocalDate fechaInicio, LocalDate fechaFin, BigDecimal montoTotal,
+			ClienteEntity cliente, HospedajeEntity hospedaje, MetodoPagoEntity metodoPago) {
 		super();
-		this.montoTotal = montoTotal;
 		this.fechaInicio = fechaInicio;
 		this.fechaFin = fechaFin;
+		this.montoTotal = montoTotal;
 		this.cliente = cliente;
-		this.bungalow = bungalow;
+		this.hospedaje = hospedaje;
 		this.metodoPago = metodoPago;
 	}
-
 
 	public Long getId() {
 		return id;
@@ -71,17 +64,6 @@ public class ClienteBungalowEntity {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
-	public BigDecimal getMontoTotal() {
-		return montoTotal;
-	}
-
-
-	public void setMontoTotal(BigDecimal montoTotal) {
-		this.montoTotal = montoTotal;
-	}
-
 
 	public LocalDate getFechaInicio() {
 		return fechaInicio;
@@ -99,6 +81,14 @@ public class ClienteBungalowEntity {
 		this.fechaFin = fechaFin;
 	}
 
+	public BigDecimal getMontoTotal() {
+		return montoTotal;
+	}
+
+	public void setMontoTotal(BigDecimal montoTotal) {
+		this.montoTotal = montoTotal;
+	}
+
 	public ClienteEntity getCliente() {
 		return cliente;
 	}
@@ -107,30 +97,27 @@ public class ClienteBungalowEntity {
 		this.cliente = cliente;
 	}
 
-	public BungalowEntity getBungalow() {
-		return bungalow;
+	public HospedajeEntity getHospedaje() {
+		return hospedaje;
 	}
 
-	public void setBungalow(BungalowEntity bungalow) {
-		this.bungalow = bungalow;
+	public void setHospedaje(HospedajeEntity hospedaje) {
+		this.hospedaje = hospedaje;
 	}
-	
 
 	public MetodoPagoEntity getMetodoPago() {
 		return metodoPago;
 	}
 
-
 	public void setMetodoPago(MetodoPagoEntity metodoPago) {
 		this.metodoPago = metodoPago;
 	}
 
-
 	@Override
 	public String toString() {
-		return "ClienteBungalowEntity [id=" + id + ", montoTotal=" + montoTotal + ", fechaInicio=" + fechaInicio
-				+ ", fechaFin=" + fechaFin + ", cliente=" + cliente + ", bungalow=" + bungalow + ", metodoPago="
+		return "ClienteHospedajeEntity [id=" + id + ", fechaInicio=" + fechaInicio + ", fechaFin=" + fechaFin
+				+ ", montoTotal=" + montoTotal + ", cliente=" + cliente + ", hospedaje=" + hospedaje + ", metodoPago="
 				+ metodoPago + "]";
 	}
-
+	
 }

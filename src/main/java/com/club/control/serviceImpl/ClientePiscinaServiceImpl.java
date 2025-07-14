@@ -1,5 +1,6 @@
 package com.club.control.serviceImpl;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -83,7 +84,12 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		});
 		
 		ClientePiscinaEntity entity = ClientePiscinaMapper.toEntity(clientePiscinaDTO);
-		entity.setMontoTotal(clientePiscinaDTO.getPrecioUnitario() * clientePiscinaDTO.getCantidadPersonas());		
+		
+		//Aca hago el calculo automatico del monto total, utilizando BigDecimal porque es el tipo del atributo montoTotal
+		BigDecimal montoTotal = BigDecimal.valueOf(clientePiscinaDTO.getPrecioUnitario())
+										  .multiply(BigDecimal.valueOf(clientePiscinaDTO.getCantidadPersonas()));
+		
+		entity.setMontoTotal(montoTotal);		
 		entity.setFecha(LocalDate.now());
 		//Seteo cliente y el método de pago
 		entity.setCliente(cliente);
@@ -130,7 +136,11 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		//Actualizamos el servicio de piscina
 		entity.setPrecioUnitario(clientePiscinaDTO.getPrecioUnitario());
 		entity.setCantidadPersonas(clientePiscinaDTO.getCantidadPersonas());
-		entity.setMontoTotal(clientePiscinaDTO.getPrecioUnitario() * clientePiscinaDTO.getCantidadPersonas());
+		
+		//Calculando el monto total
+		BigDecimal montoTotal = BigDecimal.valueOf(clientePiscinaDTO.getPrecioUnitario())
+										  .multiply(BigDecimal.valueOf(clientePiscinaDTO.getCantidadPersonas()));
+		entity.setMontoTotal(montoTotal);
 		entity.setFecha(clientePiscinaDTO.getFecha());
 		entity.setCliente(cliente);
 		entity.setMetodo(metodo);

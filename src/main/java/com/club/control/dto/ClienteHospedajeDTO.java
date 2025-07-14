@@ -3,22 +3,18 @@ package com.club.control.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
-public class ClientePiscinaDTO {
+public class ClienteHospedajeDTO {
 
 	@Schema(accessMode = Schema.AccessMode.READ_ONLY)//Esto oculta el id métodos POST y PUT para Swagger
 	private Long id;
-	private double precioUnitario;
-	private int cantidadPersonas;
-	@Schema(accessMode = Schema.AccessMode.READ_ONLY)
+	private LocalDate fechaInicio;
+	private LocalDate fechaFin;
 	private BigDecimal montoTotal;
-	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
-	private LocalDate fecha;
 	
 	private ClienteDTO cliente;
+	private HospedajeDTO hospedaje;
 	private MetodoPagoDTO metodoPago;
 	
 	public Long getId() {
@@ -27,30 +23,23 @@ public class ClientePiscinaDTO {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public double getPrecioUnitario() {
-		return precioUnitario;
+	public LocalDate getFechaInicio() {
+		return fechaInicio;
 	}
-	public void setPrecioUnitario(double precioUnitario) {
-		this.precioUnitario = precioUnitario;
+	public void setFechaInicio(LocalDate fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
-	public int getCantidadPersonas() {
-		return cantidadPersonas;
+	public LocalDate getFechaFin() {
+		return fechaFin;
 	}
-	public void setCantidadPersonas(int cantidadPersonas) {
-		this.cantidadPersonas = cantidadPersonas;
+	public void setFechaFin(LocalDate fechaFin) {
+		this.fechaFin = fechaFin;
 	}
-		
 	public BigDecimal getMontoTotal() {
 		return montoTotal;
 	}
 	public void setMontoTotal(BigDecimal montoTotal) {
 		this.montoTotal = montoTotal;
-	}
-	public LocalDate getFecha() {
-		return fecha;
-	}
-	public void setFecha(LocalDate fecha) {
-		this.fecha = fecha;
 	}
 	public ClienteDTO getCliente() {
 		return cliente;
@@ -58,14 +47,18 @@ public class ClientePiscinaDTO {
 	public void setCliente(ClienteDTO cliente) {
 		this.cliente = cliente;
 	}
+	public HospedajeDTO getHospedaje() {
+		return hospedaje;
+	}
+	public void setHospedaje(HospedajeDTO hospedaje) {
+		this.hospedaje = hospedaje;
+	}
 	public MetodoPagoDTO getMetodoPago() {
 		return metodoPago;
 	}
 	public void setMetodoPago(MetodoPagoDTO metodoPago) {
 		this.metodoPago = metodoPago;
 	}
-	
-	
 	
 	
 }
