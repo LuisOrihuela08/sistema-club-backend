@@ -30,6 +30,10 @@ public class ClienteEntity {
 	@JsonIgnore
 	private List<ClientePiscinaEntity> clientePiscina;
 	
+	@OneToMany(mappedBy = "cliente")
+	@JsonIgnore
+	private List<ClienteBungalowEntity> clienteBungalow;
+	
 	public ClienteEntity() {
 		super();
 	}
