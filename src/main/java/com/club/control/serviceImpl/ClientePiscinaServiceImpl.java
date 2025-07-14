@@ -90,7 +90,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		entity.setMetodo(metodo);
 		
 		ClientePiscinaEntity saved = clientePiscinaRepository.save(entity);
-		logger.info("Service de piscina guardado: {}", saved);
+		logger.info("Nuevo Servicio de piscina guardado: {}", saved);
 		return ClientePiscinaMapper.toDto(saved);
 	}
 
@@ -104,7 +104,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		}
 		
 		ClientePiscinaEntity entity = clientePiscinaRepository.findById(id).orElseThrow(() -> {
-			throw new RecursosNoEncontradosException("No se encontró un servicio de piscina con el id: "+ id);
+			throw new RecursosNoEncontradosException("No se encontró un servicio de piscina registrado con el id: "+ id);
 		});
 		
 		//Verificando la existencia y actualizacion del cliente

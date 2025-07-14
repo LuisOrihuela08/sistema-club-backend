@@ -39,7 +39,7 @@ public class ClientePiscinaEntity {
 	@JoinColumn(name = "cliente_id")
 	private ClienteEntity cliente;
 	
-	@ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "metodo_pago_id")
 	private MetodoPagoEntity metodo;
 
