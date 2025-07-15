@@ -147,4 +147,22 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 										.map(ClienteBungalowMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteBungalowDTO> pageClienteBungalowByFechaInicio(LocalDate fechaInicio, Pageable pageable) {
+		
+		if (fechaInicio == null) {
+			throw new IllegalArgumentException("La fecha no puede ser nulo");
+		}
+		
+		Page<ClienteBungalowEntity> result = clienteBungalowRepository.findByFechaInicio(fechaInicio, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de bungalows registrados con la fecha: " + fechaInicio);
+		}
+		
+		logger.info("Fecha ingresada: {}", fechaInicio);
+		logger.info("Búsqueda de servicios de bungalows por fecha diaria OK !");
+		return result.map(ClienteBungalowMapper::toDto);
+	}
+
 }
