@@ -65,6 +65,15 @@ public class ClienteBungalowController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/pagination/cliente-dni")
+	public ResponseEntity<?> getPaginationByClienteDni (@RequestParam ("page") int page,
+			  								   		    @RequestParam ("size") int size,
+			  								   		    @RequestParam ("dni") String dni){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClienteBungalowDTO> result = clienteBungalowService.pageClienteBungalowByClienteDni(dni, pageable);
+		return ResponseEntity.ok(result);
+	}
+	
 	@PostMapping("/")
 	public ResponseEntity<?> createClienteBungalow (@RequestBody ClienteBungalowDTO dto){
 		System.out.println("DTO recibido: " + dto);
