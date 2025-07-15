@@ -1,5 +1,6 @@
 package com.club.control.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -11,8 +12,13 @@ public interface ClientePiscinaService {
 
 	List<ClientePiscinaDTO> listAll();
 	Page<ClientePiscinaDTO> pageClientsPiscina (Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaByFecha (LocalDate fecha, Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaByFechaMonth (int anio, int mes, Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaByClienteDni (String dni, Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha (String nombreMetodoPago, LocalDate inicio, LocalDate fin, Pageable pageable);
 	ClientePiscinaDTO getClientePiscinaId (Long id);
 	ClientePiscinaDTO saveClientePiscina (ClientePiscinaDTO clientePiscinaDTO);
 	ClientePiscinaDTO updateClientePiscina (Long id, ClientePiscinaDTO clientePiscinaDTO);
 	void deleteClientePiscina (Long id);
+	
 }

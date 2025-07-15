@@ -2,6 +2,7 @@ package com.club.control.serviceImpl;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.YearMonth;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -175,5 +176,88 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		logger.info("Listado de servicio de piscina con paginación OK !");
 		return clientePiscinaRepository.findAll(pageable)
 									   .map(ClientePiscinaMapper::toDto);
+	}
+
+	@Override
+	public Page<ClientePiscinaDTO> pageClientePiscinaByFecha(LocalDate fecha, Pageable pageable) {
+		
+		if (fecha == null) {
+			throw new IllegalArgumentException("La fecha no puede ser nulo");
+		}
+		
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByFecha(fecha, pageable);
+		
+		if (pageEntity.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron registros en la fecha " + fecha);
+		}
+		logger.info("Listado por paginación por fecha diaria");
+		return pageEntity.map(ClientePiscinaMapper::toDto);
+	}
+
+	@Override
+	public Page<ClientePiscinaDTO> pageClientePiscinaByFechaMonth(int anio, int mes, Pageable pageable) {
+		
+		if (mes < 1 || mes > 12) {
+			throw new IllegalArgumentException("El mes debe estar entre 1 y 12");
+		}
+		
+		YearMonth yearMonth = YearMonth.of(anio, mes);
+		LocalDate inicio = yearMonth.atDay(1);
+		LocalDate fin = yearMonth.atEndOfMonth();
+		
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByFechaBetween(inicio, fin, pageable);
+		
+		if (pageEntity.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron registros en el mes " + mes + " del año " + anio);
+		}
+		
+		logger.info("Listado por paginación por fecha por mes");
+		return pageEntity.map(ClientePiscinaMapper::toDto);
+	}
+
+	@Override
+	public Page<ClientePiscinaDTO> pageClientePiscinaByClienteDni(String dni, Pageable pageable) {
+		
+		if (dni == null || dni.isEmpty()) {
+			throw new IllegalArgumentException("El dni no puede ser nulo o vacío");
+		}
+		
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByClienteDni(dni, pageable);
+		
+		if (pageEntity.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de piscina con el dni: " + dni);
+		}
+		
+		logger.info("DNI ingresado: {}", dni);
+		logger.info("Servicio de piscina encontrado con el dni: {}", pageEntity);
+		return pageEntity.map(ClientePiscinaMapper::toDto);
+	}
+
+	@Override
+	public Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha(String nombreMetodoPago, LocalDate inicio,
+			LocalDate fin, Pageable pageable) {
+		
+		if (nombreMetodoPago == null || nombreMetodoPago.isEmpty()) {
+			throw new IllegalArgumentException("El método de pago no puede ser nulo o vacío");
+		}
+		
+		if (inicio == null || fin == null) {
+			throw new IllegalArgumentException("Se debe proporcionar ambas fechas");
+		}
+		
+		if (inicio.isAfter(fin)) {
+			throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha fin");
+		}
+		
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByMetodoNameAndFechaBetween(nombreMetodoPago, inicio, fin, pageable);
+		
+		if (pageEntity.isEmpty()) {
+			throw new RecursosNoEncontradosException(
+					"No se encontraron servicios de piscina con el método de pago '" +
+					nombreMetodoPago + "' entre " + inicio + " y " + fin);
+		}
+		
+		logger.info("Búsqueda de servicios de piscina por método de pago y entre meses");
+		return pageEntity.map(ClientePiscinaMapper::toDto);
 	}	
 }
