@@ -74,6 +74,17 @@ public class ClienteBungalowController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/pagination/metodoPago/fecha-between")
+	public ResponseEntity<?> getPaginationByMetodoPagoAndFechaBetween (@RequestParam ("page") int page,
+	   		    													   @RequestParam ("size") int size,
+	   		    													   @RequestParam ("nameMetodoPago") String nameMetodoPago,
+	   		    													   @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+	   		    													   @RequestParam ("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClienteBungalowDTO> result = clienteBungalowService.pageClienteBungalowByMetodoPagoAndFechasBetween(nameMetodoPago, desde, hasta, pageable);
+		return ResponseEntity.ok(result);
+	}
+	
 	@PostMapping("/")
 	public ResponseEntity<?> createClienteBungalow (@RequestBody ClienteBungalowDTO dto){
 		System.out.println("DTO recibido: " + dto);

@@ -202,4 +202,26 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		return result.map(ClienteBungalowMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteBungalowDTO> pageClienteBungalowByMetodoPagoAndFechasBetween(String nameMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable) {
+		
+		if (desde == null || hasta == null) {
+			throw new IllegalArgumentException("Se debe ingresar ambas fechas");
+		}
+		if (nameMetodoPago == null || nameMetodoPago.isEmpty()) {
+			throw new IllegalArgumentException("El método de pago no puede ser nulo o vacío");
+		}
+		
+		Page<ClienteBungalowEntity> result = clienteBungalowRepository.findByMetodoPagoNameAndFechaInicioBetween(nameMetodoPago, desde, hasta, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de bungalows con el método de pago: " + nameMetodoPago + " entre las fechas ingresadas: " + desde + " y " + hasta);
+		}
+		
+		logger.info("Método de pago ingresado: {}", nameMetodoPago);
+		logger.info("Fechas ingresadas ingresadas, desde: {} hasta: {}", desde, hasta);
+		logger.info("Búsqueda de servicios de bungalows por metodo de pago y entre fechas OK");
+		return result.map(ClienteBungalowMapper::toDto);
+	}
+
 }

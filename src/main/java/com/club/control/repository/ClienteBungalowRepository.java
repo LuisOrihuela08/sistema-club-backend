@@ -18,4 +18,7 @@ public interface ClienteBungalowRepository extends JpaRepository<ClienteBungalow
 	
 	//Filtro para buscar servicios de bungalows por el DNI del cliente
 	Page<ClienteBungalowEntity> findByClienteDni (String dni, Pageable pageable);
+	
+	//Filtro para buscar servicios de bungalows por el metodo de pago entre fechas
+	Page<ClienteBungalowEntity> findByMetodoPagoNameAndFechaInicioBetween ( String name, LocalDate desde, LocalDate hasta, Pageable pageable);
 }

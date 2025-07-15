@@ -19,6 +19,6 @@ public interface ClientePiscinaRepository extends JpaRepository<ClientePiscinaEn
 	//Filtro del servicio de piscina por el DNI del cliente
 	Page<ClientePiscinaEntity> findByClienteDni (String dni, Pageable pageable);
 	
-	//Filtro del servicio de piscina por el nombre del metodo de pago por mes
+	//Filtro del servicio de piscina por el nombre del metodo de pago entre fechas
 	Page<ClientePiscinaEntity> findByMetodoNameAndFechaBetween (String name, LocalDate inicio, LocalDate fin, Pageable pageable);
 }
