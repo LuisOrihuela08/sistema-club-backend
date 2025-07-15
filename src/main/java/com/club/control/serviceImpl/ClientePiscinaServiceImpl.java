@@ -190,6 +190,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		if (pageEntity.isEmpty()) {
 			throw new RecursosNoEncontradosException("No se encontraron registros en la fecha " + fecha);
 		}
+		logger.info("Fecha ingresada: {}", fecha);
 		logger.info("Listado por paginación por fecha diaria");
 		return pageEntity.map(ClientePiscinaMapper::toDto);
 	}

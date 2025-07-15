@@ -1,5 +1,6 @@
 package com.club.control.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -11,6 +12,7 @@ public interface ClienteBungalowService {
 
 	List<ClienteBungalowDTO> listAll();
 	Page<ClienteBungalowDTO> pageClienteBungalow (Pageable pageable);
+	Page<ClienteBungalowDTO> pageClienteBungalowByFechaInicio (LocalDate fechaInicio, Pageable pageable);
 	ClienteBungalowDTO createClienteBungalow (ClienteBungalowDTO clienteBungalowDTO);
 	ClienteBungalowDTO updateClienteBungalow (Long id, ClienteBungalowDTO clienteBungalowDTO);
 	

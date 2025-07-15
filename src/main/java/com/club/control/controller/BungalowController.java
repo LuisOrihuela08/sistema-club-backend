@@ -47,7 +47,7 @@ public class BungalowController {
 		return ResponseEntity.ok(bungalowService.findBungalowByCodigo(codigo));
 	}
 	
-	@GetMapping("/disponibles")
+	@GetMapping("/disponibilidad")
 	public ResponseEntity<?> getBungalowsDisponibles (@RequestParam ("page") int page,
 													  @RequestParam ("size") int size,
 													  @RequestParam ("disponible") boolean disponible){
