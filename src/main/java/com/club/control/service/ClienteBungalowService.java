@@ -13,6 +13,7 @@ public interface ClienteBungalowService {
 	List<ClienteBungalowDTO> listAll();
 	Page<ClienteBungalowDTO> pageClienteBungalow (Pageable pageable);
 	Page<ClienteBungalowDTO> pageClienteBungalowByFechaInicio (LocalDate fechaInicio, Pageable pageable);
+	Page<ClienteBungalowDTO> pageClienteBungalowByFechasBetween (LocalDate fechaInicio, LocalDate fechaFin, Pageable pageable);
 	ClienteBungalowDTO createClienteBungalow (ClienteBungalowDTO clienteBungalowDTO);
 	ClienteBungalowDTO updateClienteBungalow (Long id, ClienteBungalowDTO clienteBungalowDTO);
 	

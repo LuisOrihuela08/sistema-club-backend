@@ -165,4 +165,23 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		return result.map(ClienteBungalowMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteBungalowDTO> pageClienteBungalowByFechasBetween(LocalDate desde, LocalDate hasta,
+			Pageable pageable) {
+		
+		if (desde == null || hasta == null) {
+			throw new IllegalArgumentException("Se debe ingresar ambas fechas");
+		}
+		
+		Page<ClienteBungalowEntity> result = clienteBungalowRepository.findByFechaInicioBetween(desde, hasta, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de bungalows con las fechas ingresadas: " + desde + " y " + hasta);
+		}
+		
+		logger.info("Fechas ingresadas, fecha inicio: {} fecha fin: {}", desde, hasta);
+		logger.info("Búsqueda de servicios de bungalows entre fechas OK");
+		return result.map(ClienteBungalowMapper::toDto);
+	}
+
 }
