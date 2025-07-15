@@ -184,4 +184,22 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		return result.map(ClienteBungalowMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteBungalowDTO> pageClienteBungalowByClienteDni(String dni, Pageable pageable) {
+		
+		if (dni == null || dni.isEmpty()) {
+			throw new IllegalArgumentException("El dni no puede ser nulo o vacío");
+		}
+		
+		Page<ClienteBungalowEntity> result = clienteBungalowRepository.findByClienteDni(dni, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de bungalows registrados con el dni: " + dni);
+		}
+		
+		logger.info("DNI ingresado: {}", dni);
+		logger.info("Servicios de bungalows encontrados: {}", result);
+		return result.map(ClienteBungalowMapper::toDto);
+	}
+
 }
