@@ -2,11 +2,15 @@ package com.club.control.service;
 
 import java.util.List;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import com.club.control.dto.ClienteBungalowDTO;
 
 public interface ClienteBungalowService {
 
 	List<ClienteBungalowDTO> listAll();
+	Page<ClienteBungalowDTO> pageClienteBungalow (Pageable pageable);
 	ClienteBungalowDTO createClienteBungalow (ClienteBungalowDTO clienteBungalowDTO);
 	ClienteBungalowDTO updateClienteBungalow (Long id, ClienteBungalowDTO clienteBungalowDTO);
 	
