@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.club.control.dto.ClienteHospedajeDTO;
@@ -142,6 +144,13 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		
 		logger.info("Servicio de hospedaje actualizado: {}", updated);
 		return ClienteHospedajeMapper.toDto(updated);
+	}
+
+	@Override
+	public Page<ClienteHospedajeDTO> pageClienteHospedaje(Pageable pageable) {
+		logger.info("Listado por paginación del servicio de hospedaje OK !");
+		return clienteHospedajeRepository.findAll(pageable)
+										 .map(ClienteHospedajeMapper::toDto);
 	}
 
 }

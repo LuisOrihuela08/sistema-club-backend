@@ -6,6 +6,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.club.control.dto.ClienteBungalowDTO;
@@ -136,6 +138,13 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		ClienteBungalowEntity updated = clienteBungalowRepository.save(entity);
 		logger.info("Servicio de bungalow actualizado: "+ updated);	
 		return ClienteBungalowMapper.toDto(updated);
+	}
+
+	@Override
+	public Page<ClienteBungalowDTO> pageClienteBungalow(Pageable pageable) {
+		logger.info("Listado por paginación del servicio de bungalow OK !");
+		return clienteBungalowRepository.findAll(pageable)
+										.map(ClienteBungalowMapper::toDto);
 	}
 
 }

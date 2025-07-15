@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.club.control.dto.ClienteDTO;
@@ -108,5 +110,18 @@ public class ClienteServiceImpl implements ClienteService {
 		
 		ClienteEntity clienteSaved = clienteRepository.save(entity);
 		return ClienteMapper.toDto(clienteSaved);
+	}
+
+	@Override
+	public Page<ClienteDTO> pageClients(Pageable pageable) {
+		
+		if (pageable.getPageSize() <= 0 )  {
+			throw new IllegalArgumentException("El tamaño no puede ser menor/igual a 0");
+		} else if (pageable.getPageNumber() < 0) {
+			throw new IllegalArgumentException("La página no puede ser menor a 0");
+		}
+		logger.info("Listado de paginación de clientes OK !");
+		return clienteRepository.findAll(pageable)
+								.map(ClienteMapper::toDto);
 	}
 }

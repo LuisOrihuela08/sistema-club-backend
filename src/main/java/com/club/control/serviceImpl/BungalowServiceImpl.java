@@ -5,6 +5,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.club.control.dto.BungalowDTO;
@@ -102,6 +104,13 @@ public class BungalowServiceImpl implements BungalowService{
 		
 		logger.info("Se cambió el estado de la disponibilidad del Bungalow: {}", updateDisponibility);
 		return BungalowMapper.toDto(updateDisponibility);
+	}
+
+	@Override
+	public Page<BungalowDTO> pageBungalow(Pageable pageable) {
+		logger.info("Listado por paginación de Bungalows OK !");
+		return bungalowRepository.findAll(pageable)
+								 .map(BungalowMapper::toDto);
 	}
 
 }

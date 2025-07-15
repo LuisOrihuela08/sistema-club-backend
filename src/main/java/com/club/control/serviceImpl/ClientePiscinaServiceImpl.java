@@ -7,6 +7,8 @@ import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.club.control.dto.ClientePiscinaDTO;
@@ -166,5 +168,12 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		clientePiscinaRepository.delete(entity);
 		logger.info("Servicio de piscina eliminado exitosamente");
 		
+	}
+
+	@Override
+	public Page<ClientePiscinaDTO> pageClientsPiscina(Pageable pageable) {
+		logger.info("Listado de servicio de piscina con paginación OK !");
+		return clientePiscinaRepository.findAll(pageable)
+									   .map(ClientePiscinaMapper::toDto);
 	}	
 }
