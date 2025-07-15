@@ -28,12 +28,12 @@ public class ClienteController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<?> findAllClients (){
+	public ResponseEntity<?> getAllClients (){
 		return ResponseEntity.ok(clienteService.listClients());
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> findPageClients(@RequestParam ("page") int page,
+	public ResponseEntity<?> getPageClients(@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteDTO> pageResult = clienteService.pageClients(pageable);
@@ -41,12 +41,12 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> findClienteById(@PathVariable Long id) {
+	public ResponseEntity<?> getClienteById(@PathVariable Long id) {
 		return ResponseEntity.ok(clienteService.getClientById(id));
 	}
 	
 	@GetMapping("/dni/{dni}")
-	public ResponseEntity<?> findClienteByDni(@PathVariable String dni){
+	public ResponseEntity<?> getClienteByDni(@PathVariable String dni){
 		return ResponseEntity.ok(clienteService.getClientByDni(dni));
 	}
 	

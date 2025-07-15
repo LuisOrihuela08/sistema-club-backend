@@ -28,12 +28,12 @@ public class MetodoPagoController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> findAllMetodosPago (){
+	public ResponseEntity<?> getAllMetodosPago (){
 		return ResponseEntity.ok(metodoPagoService.listAll());
 	}
 	
 	@GetMapping("/name/{name}")
-	public ResponseEntity<?> findMetodoByName(@PathVariable String name){
+	public ResponseEntity<?> getMetodoByName(@PathVariable String name){
 		return ResponseEntity.ok(metodoPagoService.findName(name));
 	}
 	

@@ -14,5 +14,6 @@ public interface BungalowService {
 	BungalowDTO saveBungalow (BungalowDTO bungalowDTO);
 	BungalowDTO updateBungalow (Long id, BungalowDTO bungalowDTO);
 	BungalowDTO findBungalowByCodigo (String codigo);
+	Page<BungalowDTO> pageBungalowDisponibilidad (boolean disponible, Pageable pageable);
 	BungalowDTO updateDisponibility (Long id, boolean disponible);
 }
