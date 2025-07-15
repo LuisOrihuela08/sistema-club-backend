@@ -35,8 +35,8 @@ public class BungalowController {
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> findPagination (@RequestParam ("page") int page,
-											 @RequestParam ("size") int size){
+	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
+											@RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<BungalowDTO> pagination = bungalowService.pageBungalow(pageable);
 		return ResponseEntity.ok(pagination);
@@ -45,6 +45,15 @@ public class BungalowController {
 	@GetMapping("/codigo/{codigo}")
 	public ResponseEntity<?> getBungalowByCodigo (@PathVariable String codigo){
 		return ResponseEntity.ok(bungalowService.findBungalowByCodigo(codigo));
+	}
+	
+	@GetMapping("/disponibles")
+	public ResponseEntity<?> getBungalowsDisponibles (@RequestParam ("page") int page,
+													  @RequestParam ("size") int size,
+													  @RequestParam ("disponible") boolean disponible){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<BungalowDTO> result = bungalowService.pageBungalowDisponibilidad(disponible, pageable);
+		return ResponseEntity.ok(result);
 	}
 	
 	@PatchMapping("/{id}/disponibilidad")

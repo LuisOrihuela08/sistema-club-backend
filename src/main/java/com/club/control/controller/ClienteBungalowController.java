@@ -31,12 +31,12 @@ public class ClienteBungalowController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> findAll(){
+	public ResponseEntity<?> getAll(){
 		return ResponseEntity.ok(clienteBungalowService.listAll());
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> findPagination (@RequestParam ("page") int page,
+	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteBungalowDTO> pagination = clienteBungalowService.pageClienteBungalow(pageable);

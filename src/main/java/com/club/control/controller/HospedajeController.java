@@ -33,7 +33,7 @@ public class HospedajeController {
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> findPagination (@RequestParam ("page") int page,
+	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<HospedajeDTO> pagination = hospedajeService.pageHospedaje(pageable);

@@ -39,7 +39,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> findPagination (@RequestParam ("page") int page,
+	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 			 								 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 		Page<ClientePiscinaDTO> pagination = clientePiscinaService.pageClientsPiscina(pageable);
@@ -47,7 +47,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/fecha")
-	public ResponseEntity<?> findPaginationByFecha (@RequestParam ("page") int page,
+	public ResponseEntity<?> getPaginationByFecha (@RequestParam ("page") int page,
 			 										@RequestParam ("size") int size,
 			 										@RequestParam ("fecha")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 		Pageable pageable = PageRequest.of(page, size);
@@ -56,7 +56,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/mes")
-	public ResponseEntity<?> findPaginationByFechaMonth (@RequestParam ("page") int page,
+	public ResponseEntity<?> getPaginationByFechaMonth (@RequestParam ("page") int page,
 														 @RequestParam ("size") int size,
 														 @RequestParam ("mes") int mes,
 					 									 @RequestParam ("anio") int anio){
@@ -65,7 +65,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/dni")
-	public ResponseEntity<?> findByPaginationByClienteDni (@RequestParam("dni") String dni,
+	public ResponseEntity<?> getByPaginationByClienteDni (@RequestParam("dni") String dni,
 		    											   @RequestParam("page") int page,
 		    											   @RequestParam("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
@@ -73,7 +73,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/metodo-pago-fecha")
-	public ResponseEntity<?> findByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
+	public ResponseEntity<?> getByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
 		    													 @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
 		    													 @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
 		    													 @RequestParam("page") int page,

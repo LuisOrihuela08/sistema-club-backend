@@ -113,4 +113,17 @@ public class BungalowServiceImpl implements BungalowService{
 								 .map(BungalowMapper::toDto);
 	}
 
+	@Override
+	public Page<BungalowDTO> pageBungalowDisponibilidad(boolean disponible, Pageable pageable) {
+		
+		Page<BungalowEntity> entities = bungalowRepository.findByDisponible(disponible, pageable);
+		
+		if (entities.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron bungalows con la disponiblidad: " + disponible);
+		}
+		
+		logger.info("Búsqueda de la disponibilidad de los bungalows OK !");
+		return entities.map(BungalowMapper::toDto);
+	}
+
 }
