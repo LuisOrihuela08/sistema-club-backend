@@ -1,10 +1,13 @@
 package com.club.control.controller;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -38,9 +41,46 @@ public class ClientePiscinaController {
 	@GetMapping("/pagination")
 	public ResponseEntity<?> findPagination (@RequestParam ("page") int page,
 			 								 @RequestParam ("size") int size){
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 		Page<ClientePiscinaDTO> pagination = clientePiscinaService.pageClientsPiscina(pageable);
 		return ResponseEntity.ok(pagination);
+	}
+	
+	@GetMapping("/pagination/fecha")
+	public ResponseEntity<?> findPaginationByFecha (@RequestParam ("page") int page,
+			 										@RequestParam ("size") int size,
+			 										@RequestParam ("fecha")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClientePiscinaDTO> pageResult = clientePiscinaService.pageClientePiscinaByFecha(fecha, pageable);
+		return ResponseEntity.ok(pageResult);
+	}
+	
+	@GetMapping("/pagination/mes")
+	public ResponseEntity<?> findPaginationByFechaMonth (@RequestParam ("page") int page,
+														 @RequestParam ("size") int size,
+														 @RequestParam ("mes") int mes,
+					 									 @RequestParam ("anio") int anio){
+		Pageable pageable = PageRequest.of(page, size);
+		return ResponseEntity.ok(clientePiscinaService.pageClientePiscinaByFechaMonth(anio, mes, pageable));
+	}
+	
+	@GetMapping("/pagination/dni")
+	public ResponseEntity<?> findByPaginationByClienteDni (@RequestParam("dni") String dni,
+		    											   @RequestParam("page") int page,
+		    											   @RequestParam("size") int size){
+		Pageable pageable = PageRequest.of(page, size);
+		return ResponseEntity.ok(clientePiscinaService.pageClientePiscinaByClienteDni(dni, pageable));
+	}
+	
+	@GetMapping("/pagination/metodo-pago-fecha")
+	public ResponseEntity<?> findByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
+		    													 @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
+		    													 @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
+		    													 @RequestParam("page") int page,
+		    													 @RequestParam("size") int size){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClientePiscinaDTO> result = clientePiscinaService.pageClientePiscinaMetodoPagoNombreAndFecha(metodoPago, inicio, fin, pageable);
+		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping("/")
