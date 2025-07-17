@@ -20,6 +20,9 @@ public interface ClienteHospedajeRepository extends JpaRepository<ClienteHospeda
 	//Filtro para buscar servicios de hospedaje por el DNI del cliente
 	Page<ClienteHospedajeEntity> findByClienteDni (String dni, Pageable pageable);
 	
+	//Filtro para buscar servicios de hospedajes por el metodo de pago entre fechas
+	Page<ClienteHospedajeEntity> findByMetodoPagoNameAndFechaInicioBetween (String name, LocalDate desde, LocalDate hasta, Pageable pageable);
+	
 	//Esto es para liberar el cuarto de hospedaje a activo luego de terminado el servicio seguna la fecha fin
 	List<ClienteHospedajeEntity> findByFechaFinBefore (LocalDate fecha);
 }
