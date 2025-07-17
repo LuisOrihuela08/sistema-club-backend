@@ -190,23 +190,20 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 	}
 
 	@Override
-	public Page<ClientePiscinaDTO> pageClientePiscinaByFechaMonth(int anio, int mes, Pageable pageable) {
+	public Page<ClientePiscinaDTO> pageClientePiscinaByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable) {
 		
-		if (mes < 1 || mes > 12) {
-			throw new IllegalArgumentException("El mes debe estar entre 1 y 12");
+		if (desde == null || hasta == null) {
+			throw new IllegalArgumentException("Se debe proporcionar ambas fechas");
 		}
 		
-		YearMonth yearMonth = YearMonth.of(anio, mes);
-		LocalDate inicio = yearMonth.atDay(1);
-		LocalDate fin = yearMonth.atEndOfMonth();
-		
-		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByFechaBetween(inicio, fin, pageable);
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByFechaBetween(desde, hasta, pageable);
 		
 		if (pageEntity.isEmpty()) {
-			throw new RecursosNoEncontradosException("No se encontraron registros en el mes " + mes + " del año " + anio);
+			throw new RecursosNoEncontradosException("No se encontraron registros en la fecha: " + desde + " hasta " + hasta);
 		}
 		
-		logger.info("Listado por paginación por fecha por mes");
+		logger.info("Fechas ingresadas, desde: {} hasta: {}", desde, hasta);
+		logger.info("Búsqueda de servicios de piscina por fechas OK");
 		return pageEntity.map(ClientePiscinaMapper::toDto);
 	}
 
@@ -229,27 +226,26 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 	}
 
 	@Override
-	public Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha(String nombreMetodoPago, LocalDate inicio,
-			LocalDate fin, Pageable pageable) {
+	public Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha(String nombreMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable) {
 		
 		if (nombreMetodoPago == null || nombreMetodoPago.isEmpty()) {
 			throw new IllegalArgumentException("El método de pago no puede ser nulo o vacío");
 		}
 		
-		if (inicio == null || fin == null) {
+		if (desde == null || hasta == null) {
 			throw new IllegalArgumentException("Se debe proporcionar ambas fechas");
 		}
 		
-		if (inicio.isAfter(fin)) {
+		if (desde.isAfter(hasta)) {
 			throw new IllegalArgumentException("La fecha de inicio no puede ser posterior a la fecha fin");
 		}
 		
-		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByMetodoNameAndFechaBetween(nombreMetodoPago, inicio, fin, pageable);
+		Page<ClientePiscinaEntity> pageEntity = clientePiscinaRepository.findByMetodoNameAndFechaBetween(nombreMetodoPago, desde, hasta, pageable);
 		
 		if (pageEntity.isEmpty()) {
 			throw new RecursosNoEncontradosException(
 					"No se encontraron servicios de piscina con el método de pago '" +
-					nombreMetodoPago + "' entre " + inicio + " y " + fin);
+					nombreMetodoPago + "' entre " + desde + " y " + hasta);
 		}
 		
 		logger.info("Búsqueda de servicios de piscina por método de pago y entre meses");
@@ -270,5 +266,12 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		logger.info("ID ingresado: {}", id);
 		logger.info("Servicio de piscina encontrado: {}", result);
 		return ClientePiscinaMapper.toDto(result);
+	}
+
+	@Override
+	public byte[] exportarPdfFiltradoClientePiscina(String dni, String nombreMetodoPago, LocalDate fecha,
+			LocalDate desde, LocalDate hasta) {
+		// TODO Auto-generated method stub
+		return null;
 	}	
 }

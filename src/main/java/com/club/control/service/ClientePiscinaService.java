@@ -14,11 +14,13 @@ public interface ClientePiscinaService {
 	List<ClientePiscinaDTO> listAll();
 	Page<ClientePiscinaDTO> pageClientsPiscina (Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaByFecha (LocalDate fecha, Pageable pageable);
-	Page<ClientePiscinaDTO> pageClientePiscinaByFechaMonth (int anio, int mes, Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaByFechaBetween(LocalDate desde, LocalDate hasta, Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaByClienteDni (String dni, Pageable pageable);
-	Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha (String nombreMetodoPago, LocalDate inicio, LocalDate fin, Pageable pageable);
+	Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha (String nombreMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable);
 	ClientePiscinaDTO saveClientePiscina (ClientePiscinaDTO clientePiscinaDTO);
 	ClientePiscinaDTO updateClientePiscina (Long id, ClientePiscinaDTO clientePiscinaDTO);
 	void deleteClientePiscina (Long id);
 	
+	//Esto es para generar PDF
+	byte[] exportarPdfFiltradoClientePiscina (String dni, String nombreMetodoPago, LocalDate fecha, LocalDate desde, LocalDate hasta);
 }
