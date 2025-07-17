@@ -196,4 +196,23 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		return result.map(ClienteHospedajeMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteHospedajeDTO> pageClienteHospedajeByFechasBetween(LocalDate desde, LocalDate hasta,
+			Pageable pageable) {
+		
+		if (desde == null || hasta == null) {
+			throw new IllegalArgumentException("Ambas fechas son requeridas para la búsqueda");
+		}
+		
+		Page<ClienteHospedajeEntity> result = clienteHospedajeRepository.findByFechaInicioBetween(desde, hasta, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontró servicios de hospedaje entre la fecha: " + desde + " hasta " + hasta);
+		}
+		
+		logger.info("Fechas ingresadas, desde: {} hasta: {}", desde, hasta);
+		logger.info("Búsqueda de servicios de hospedaje entre fechas OK");
+		return result.map(ClienteHospedajeMapper::toDto);
+	}
+
 }
