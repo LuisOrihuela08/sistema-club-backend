@@ -349,7 +349,7 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 				document.add(Chunk.NEWLINE);
 
 				// Tabla con columnas personalizadas
-				PdfPTable table = new PdfPTable(7); // 6 columnas
+				PdfPTable table = new PdfPTable(7); // 7 columnas
 				table.setWidthPercentage(100);
 				table.setSpacingBefore(10f);
 				table.setSpacingAfter(10f);

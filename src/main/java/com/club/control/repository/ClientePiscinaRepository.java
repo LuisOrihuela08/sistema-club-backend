@@ -25,8 +25,8 @@ public interface ClientePiscinaRepository extends JpaRepository<ClientePiscinaEn
 
 	//Versiones sin paginacion para generar los PDF para cada filtro
 	List<ClientePiscinaEntity> findByFecha (LocalDate fecha);
-	List<ClientePiscinaEntity> findByFechaBetween (LocalDate inicio, LocalDate fin);
+	List<ClientePiscinaEntity> findByFechaBetween (LocalDate desde, LocalDate hasta);
 	List<ClientePiscinaEntity> findByClienteDni (String dni);
-	List<ClientePiscinaEntity> findByMetodoNameAndFechaBetween (String name, LocalDate inicio, LocalDate fin);
+	List<ClientePiscinaEntity> findByMetodoNameAndFechaBetween (String name, LocalDate desde, LocalDate hasta);
 
 }
