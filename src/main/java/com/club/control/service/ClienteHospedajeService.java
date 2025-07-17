@@ -20,4 +20,8 @@ public interface ClienteHospedajeService {
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechasBetween (LocalDate desde, LocalDate hasta, Pageable pageable);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByClienteDni (String dni, Pageable pageable);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByMetodoPagoAndFechaBetween (String nameMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable);
+	
+	//Esto es para generar PDF
+	 byte[] exportarPdfFiltradoClienteHospedaje(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde, LocalDate hasta);
+
 }
