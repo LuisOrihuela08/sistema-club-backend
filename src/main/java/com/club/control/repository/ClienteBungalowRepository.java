@@ -25,4 +25,11 @@ public interface ClienteBungalowRepository extends JpaRepository<ClienteBungalow
 
 	//Esto es para liberar un bungalow a activo luego de terminado el servicio seguna la fecha fin
 	List<ClienteBungalowEntity> findByFechaFinBefore (LocalDate fecha);
+	
+	// Versiones sin paginación para generar los PDF para cada filtro
+	List<ClienteBungalowEntity> findByClienteDni(String dni);
+	List<ClienteBungalowEntity> findByFechaInicio (LocalDate fechaInicio);
+	List<ClienteBungalowEntity> findByFechaInicioBetween(LocalDate desde, LocalDate hasta);
+	List<ClienteBungalowEntity> findByMetodoPagoNameAndFechaInicioBetween(String metodo, LocalDate desde, LocalDate hasta);
+
 }

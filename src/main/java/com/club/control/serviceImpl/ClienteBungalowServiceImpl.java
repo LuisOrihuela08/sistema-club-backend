@@ -1,5 +1,6 @@
 package com.club.control.serviceImpl;
 
+import java.io.ByteArrayOutputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,6 +24,15 @@ import com.club.control.repository.ClienteBungalowRepository;
 import com.club.control.repository.ClienteRepository;
 import com.club.control.repository.MetodoPagoRepository;
 import com.club.control.service.ClienteBungalowService;
+import com.lowagie.text.Document;
+import com.lowagie.text.Element;
+import com.lowagie.text.Font;
+import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.Phrase;
+import com.lowagie.text.pdf.PdfPCell;
+import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfWriter;
 
 @Service
 public class ClienteBungalowServiceImpl implements ClienteBungalowService{
@@ -248,5 +258,79 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		}
 		return liberados;
 	}
+
+	@Override
+	public byte[] exportarPdfFiltrado(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde,
+			LocalDate hasta) {
+		List<ClienteBungalowEntity> datos = obtenerDatosFiltradosSinPaginacion(dni, metodoPago, fechaInicio, desde, hasta);
+		logger.info("PDF generado Exitosamente !");
+		return generarPdf(datos);
+	}
+	
+	//Esto es para generar PDF segun los filtros
+	public List<ClienteBungalowEntity> obtenerDatosFiltradosSinPaginacion(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde, LocalDate hasta) {
+        if (dni != null && !dni.isEmpty()) {
+            return clienteBungalowRepository.findByClienteDni(dni);
+        } else if (metodoPago != null && !metodoPago.isEmpty() && desde != null && hasta != null) {
+            return clienteBungalowRepository.findByMetodoPagoNameAndFechaInicioBetween(metodoPago, desde, hasta);
+        } else if (desde != null && hasta != null) {
+            return clienteBungalowRepository.findByFechaInicioBetween(desde, hasta);
+        } else if (fechaInicio != null){
+        	return clienteBungalowRepository.findByFechaInicio(fechaInicio);
+        } else {
+            return clienteBungalowRepository.findAll();
+        }
+    }
+	
+	private byte[] generarPdf(List<ClienteBungalowEntity> datos) {
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+
+	    Document document = new Document(PageSize.A4);
+	    try {
+	        PdfWriter.getInstance(document, baos);
+	        document.open();
+
+	        // Título del PDF
+	        Font fontTitulo = new Font(Font.HELVETICA, 18, Font.BOLD);
+	        Paragraph titulo = new Paragraph("Reporte de Servicios de Bungalow", fontTitulo);
+	        titulo.setAlignment(Element.ALIGN_CENTER);
+	        titulo.setSpacingAfter(20);
+	        document.add(titulo);
+
+	     // Tabla con columnas personalizadas
+	        PdfPTable table = new PdfPTable(7); // 6 columnas
+	        table.setWidthPercentage(100);
+	        table.setSpacingBefore(10f);
+	        table.setSpacingAfter(10f);
+
+	     // Encabezados
+	        Font fontHeader = new Font(Font.HELVETICA, 12, Font.BOLD);
+	        table.addCell(new PdfPCell(new Phrase("Bungalow", fontHeader)));
+	        table.addCell(new PdfPCell(new Phrase("Cliente", fontHeader)));  
+	        table.addCell(new PdfPCell(new Phrase("DNI", fontHeader)));	              
+	        table.addCell(new PdfPCell(new Phrase("Fecha Inicio", fontHeader)));
+	        table.addCell(new PdfPCell(new Phrase("Fecha Fin", fontHeader)));
+	        table.addCell(new PdfPCell(new Phrase("M.Pago", fontHeader)));
+	        table.addCell(new PdfPCell(new Phrase("Total (S/)", fontHeader)));
+
+	     // Datos
+	        for (ClienteBungalowEntity entity : datos) {
+	        	table.addCell(entity.getBungalow().getCodigo());
+	        	table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());            
+	            table.addCell(entity.getCliente().getDni());	            
+	            table.addCell(entity.getFechaInicio().toString());
+	            table.addCell(entity.getFechaFin().toString());
+	            table.addCell(entity.getMetodoPago().getName());
+	            table.addCell(entity.getMontoTotal().toString());
+	        }
+
+	        document.add(table);
+	        document.close();
+	    } catch (Exception e) {
+	        e.printStackTrace();
+	    }
+
+	    return baos.toByteArray();
+    }
 
 }
