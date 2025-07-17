@@ -52,6 +52,16 @@ public class ClienteHospedajeController {
 		return ResponseEntity.ok(result);
 	}
 	
+	@GetMapping("/pagination/fecha-between")
+	public ResponseEntity<?> getPaginationByFechaBetween (@RequestParam ("page") int page,
+			 											  @RequestParam ("size") int size,
+			 											  @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+			 											  @RequestParam ("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClienteHospedajeDTO> result = clienteHospedajeService.pageClienteHospedajeByFechasBetween(desde, hasta, pageable);
+		return ResponseEntity.ok(result);
+	}
+	
 	@PostMapping("/")
 	public ResponseEntity<?> createClienteHospedaje (@RequestBody ClienteHospedajeDTO dto){
 		ClienteHospedajeDTO created = clienteHospedajeService.saveClienteHospedaje(dto);

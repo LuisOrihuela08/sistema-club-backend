@@ -14,6 +14,9 @@ public interface ClienteHospedajeRepository extends JpaRepository<ClienteHospeda
 	//Filtro para buscar servicios de hospedaje por dia
 	Page<ClienteHospedajeEntity> findByFechaInicio (LocalDate fechaInicio, Pageable pageable);
 	
+	//Filtro para buscar servicios de bungalows entre fecha y para eso utilizare fechaInicio como intermediario -> desde - fechaInicio - hasta
+	Page<ClienteHospedajeEntity> findByFechaInicioBetween (LocalDate desde, LocalDate hasta, Pageable pageable);
+	
 	//Esto es para liberar el cuarto de hospedaje a activo luego de terminado el servicio seguna la fecha fin
 	List<ClienteHospedajeEntity> findByFechaFinBefore (LocalDate fecha);
 }
