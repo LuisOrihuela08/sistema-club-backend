@@ -233,4 +233,28 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		return result.map(ClienteHospedajeMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteHospedajeDTO> pageClienteHospedajeByMetodoPagoAndFechaBetween(String nameMetodoPago, LocalDate desde,
+			LocalDate hasta, Pageable pageable) {
+		
+		if (nameMetodoPago == null || nameMetodoPago.isEmpty()) {
+			throw new IllegalArgumentException("El método de pago no debe ser nulo o vacío");
+		}
+		
+		if (desde == null || hasta == null) {
+			throw new IllegalArgumentException("Ambas fechas son obligatorio para el filtro");
+		}
+		
+		Page<ClienteHospedajeEntity> result = clienteHospedajeRepository.findByMetodoPagoNameAndFechaInicioBetween(nameMetodoPago, desde, hasta, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontraron servicios de hospedaje con el método de pago: " + nameMetodoPago + " y las fechas: " + desde + " hasta " + hasta);
+		}
+		
+		logger.info("Método de pago ingresado: {}", nameMetodoPago);
+		logger.info("Fechas ingresadas, desde: {} hasta: {}", desde, hasta);
+		logger.info("La búsqueda de servicios de hospedaje por método de pago y entre fechas OK");
+		return result.map(ClienteHospedajeMapper::toDto);
+	}
+
 }

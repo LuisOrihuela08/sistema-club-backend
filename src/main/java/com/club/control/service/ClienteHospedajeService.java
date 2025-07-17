@@ -18,4 +18,5 @@ public interface ClienteHospedajeService {
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechaInicio (LocalDate fechaInicio, Pageable pageable);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechasBetween (LocalDate desde, LocalDate hasta, Pageable pageable);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByClienteDni (String dni, Pageable pageable);
+	Page<ClienteHospedajeDTO> pageClienteHospedajeByMetodoPagoAndFechaBetween (String nameMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable);
 }
