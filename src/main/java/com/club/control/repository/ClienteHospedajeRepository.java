@@ -25,4 +25,10 @@ public interface ClienteHospedajeRepository extends JpaRepository<ClienteHospeda
 	
 	//Esto es para liberar el cuarto de hospedaje a activo luego de terminado el servicio seguna la fecha fin
 	List<ClienteHospedajeEntity> findByFechaFinBefore (LocalDate fecha);
+	
+	// Versiones sin paginación para generar los PDF para cada filtro
+	List<ClienteHospedajeEntity> findByFechaInicio (LocalDate fechaInicio);
+	List<ClienteHospedajeEntity> findByFechaInicioBetween (LocalDate desde, LocalDate hasta);
+	List<ClienteHospedajeEntity> findByClienteDni (String dni);
+	List<ClienteHospedajeEntity> findByMetodoPagoNameAndFechaInicioBetween (String name, LocalDate desde, LocalDate hasta);
 }
