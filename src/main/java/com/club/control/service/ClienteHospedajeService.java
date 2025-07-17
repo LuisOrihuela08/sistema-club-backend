@@ -17,4 +17,5 @@ public interface ClienteHospedajeService {
 	List<ClienteHospedajeDTO> liberarHospedajeFinalizado (LocalDate fecha);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechaInicio (LocalDate fechaInicio, Pageable pageable);
 	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechasBetween (LocalDate desde, LocalDate hasta, Pageable pageable);
+	Page<ClienteHospedajeDTO> pageClienteHospedajeByClienteDni (String dni, Pageable pageable);
 }
