@@ -1,6 +1,7 @@
 package com.club.control.repository;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,4 +22,7 @@ public interface ClienteBungalowRepository extends JpaRepository<ClienteBungalow
 	
 	//Filtro para buscar servicios de bungalows por el metodo de pago entre fechas
 	Page<ClienteBungalowEntity> findByMetodoPagoNameAndFechaInicioBetween ( String name, LocalDate desde, LocalDate hasta, Pageable pageable);
+
+	//Esto es para liberar un bungalow a activo luego de terminado el servicio seguna la fecha fin
+	List<ClienteBungalowEntity> findByFechaFinBefore (LocalDate fecha);
 }
