@@ -215,4 +215,22 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		return result.map(ClienteHospedajeMapper::toDto);
 	}
 
+	@Override
+	public Page<ClienteHospedajeDTO> pageClienteHospedajeByClienteDni(String dni, Pageable pageable) {
+		
+		if (dni == null || dni.isEmpty()) {
+			throw new IllegalArgumentException("En dni no puede ser nulo o vacío");
+		}
+		
+		Page<ClienteHospedajeEntity> result = clienteHospedajeRepository.findByClienteDni(dni, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No hay servicios de hospedaje con el DNI ingresado: " + dni);
+		}
+		
+		logger.info("DNI ingresado: {}", dni);
+		logger.info("Búsqueda de servicios de hospedaje con el DNI del cliente OK");
+		return result.map(ClienteHospedajeMapper::toDto);
+	}
+
 }
