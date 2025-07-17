@@ -178,4 +178,22 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		return liberados;
 	}
 
+	@Override
+	public Page<ClienteHospedajeDTO> pageClienteHospedajeByFechaInicio(LocalDate fechaInicio, Pageable pageable) {
+		
+		if (fechaInicio == null) {
+			throw new IllegalArgumentException("Ingresar una fecha para buscar");
+		}
+		
+		Page<ClienteHospedajeEntity> result = clienteHospedajeRepository.findByFechaInicio(fechaInicio, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontró servicios de hospedaje con la fecha ingresada: " + fechaInicio);
+		}
+		
+		logger.info("Fecha Ingresada: {}", fechaInicio);
+		logger.info("Búsqueda de servicios de hospedaje por fecha OK");
+		return result.map(ClienteHospedajeMapper::toDto);
+	}
+
 }
