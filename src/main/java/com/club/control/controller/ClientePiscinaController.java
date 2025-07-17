@@ -60,13 +60,13 @@ public class ClientePiscinaController {
 		return ResponseEntity.ok(pageResult);
 	}
 	
-	@GetMapping("/pagination/mes")
+	@GetMapping("/pagination/fecha-between")
 	public ResponseEntity<?> getPaginationByFechaMonth (@RequestParam ("page") int page,
 														 @RequestParam ("size") int size,
-														 @RequestParam ("mes") int mes,
-					 									 @RequestParam ("anio") int anio){
+														 @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+					 									 @RequestParam ("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta){
 		Pageable pageable = PageRequest.of(page, size);
-		return ResponseEntity.ok(clientePiscinaService.pageClientePiscinaByFechaMonth(anio, mes, pageable));
+		return ResponseEntity.ok(clientePiscinaService.pageClientePiscinaByFechaBetween(desde, hasta, pageable));
 	}
 	
 	@GetMapping("/pagination/dni")
