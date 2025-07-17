@@ -1,5 +1,6 @@
 package com.club.control.service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -13,4 +14,5 @@ public interface ClienteHospedajeService {
 	Page<ClienteHospedajeDTO> pageClienteHospedaje (Pageable pageable);
 	ClienteHospedajeDTO saveClienteHospedaje (ClienteHospedajeDTO clienteHospedajeDTO);
 	ClienteHospedajeDTO updateClienteHospedaje (Long id, ClienteHospedajeDTO clienteHospedajeDTO);
+	List<ClienteHospedajeDTO> liberarHospedajeFinalizado (LocalDate fecha);
 }

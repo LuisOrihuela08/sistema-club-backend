@@ -1,6 +1,7 @@
 package com.club.control.serviceImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -83,6 +84,10 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 			throw new RecursosNoEncontradosException("Cuarto de hospedaje no encontrado con el id: " + clienteHospedajeDTO.getHospedaje().getId());
 		});
 		
+		//Aqui modifico la disponibilidad del hospedaje a false
+		hospedaje.setDisponible(false);
+		hospedaje = hospedajeRepository.save(hospedaje);
+		
 		MetodoPagoEntity metodoPago = metodoPagoRepository.findById(clienteHospedajeDTO.getMetodoPago().getId()).orElseThrow(() -> {
 			throw new RecursosNoEncontradosException("Método de pago no encontrado con el id: " + clienteHospedajeDTO.getMetodoPago().getId());
 		});
@@ -151,6 +156,26 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		logger.info("Listado por paginación del servicio de hospedaje OK !");
 		return clienteHospedajeRepository.findAll(pageable)
 										 .map(ClienteHospedajeMapper::toDto);
+	}
+
+	@Override
+	public List<ClienteHospedajeDTO> liberarHospedajeFinalizado(LocalDate fecha) {
+		
+		List<ClienteHospedajeEntity> serviciosFinalizados = clienteHospedajeRepository.findByFechaFinBefore(fecha);
+		
+		List<ClienteHospedajeDTO> liberados = new ArrayList<>();
+		
+		for(ClienteHospedajeEntity servicio: serviciosFinalizados) {
+			HospedajeEntity hospedaje = servicio.getHospedaje();
+			
+			if (!hospedaje.isDisponible()) {
+				hospedaje.setDisponible(true);
+				hospedajeRepository.save(hospedaje);
+				
+				liberados.add(ClienteHospedajeMapper.toDto(servicio));
+			}
+		}
+		return liberados;
 	}
 
 }
