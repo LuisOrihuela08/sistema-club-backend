@@ -18,5 +18,5 @@ public interface ClienteBungalowService {
 	Page<ClienteBungalowDTO> pageClienteBungalowByMetodoPagoAndFechasBetween (String nameMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable);
 	ClienteBungalowDTO createClienteBungalow (ClienteBungalowDTO clienteBungalowDTO);
 	ClienteBungalowDTO updateClienteBungalow (Long id, ClienteBungalowDTO clienteBungalowDTO);
-	
+	List<ClienteBungalowDTO> liberarBungalowFinalizado (LocalDate fecha);
 }

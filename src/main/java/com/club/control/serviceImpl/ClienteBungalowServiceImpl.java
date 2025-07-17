@@ -1,6 +1,7 @@
 package com.club.control.serviceImpl;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -77,6 +78,10 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		BungalowEntity bungalow = bungalowRepository.findById(clienteBungalowDTO.getBungalow().getId()).orElseThrow(() -> {
 			throw new RecursosNoEncontradosException("No se encontró el bungalow con el id: " + clienteBungalowDTO.getBungalow().getId());
 		});
+		
+		//Y aqui cambiaria la disponibilidad a false del bungalow
+		bungalow.setDisponible(false);
+		bungalow = bungalowRepository.save(bungalow);
 			
 		MetodoPagoEntity metodo = metodoPagoRepository.findById(clienteBungalowDTO.getMetodoPago().getId()).orElseThrow(() -> {
 			throw new RecursosNoEncontradosException("No se encontró el método de pago con el id: " + clienteBungalowDTO.getMetodoPago().getId());
@@ -222,6 +227,26 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 		logger.info("Fechas ingresadas ingresadas, desde: {} hasta: {}", desde, hasta);
 		logger.info("Búsqueda de servicios de bungalows por metodo de pago y entre fechas OK");
 		return result.map(ClienteBungalowMapper::toDto);
+	}
+
+	@Override
+	public List<ClienteBungalowDTO> liberarBungalowFinalizado(LocalDate fecha) {
+		
+		List<ClienteBungalowEntity> serviciosFinalizados = clienteBungalowRepository.findByFechaFinBefore(fecha);
+		
+		List<ClienteBungalowDTO> liberados = new ArrayList<>();
+		
+		for(ClienteBungalowEntity servicio: serviciosFinalizados) {
+			BungalowEntity bungalow = servicio.getBungalow();
+			
+			if (!bungalow.isDisponible()) {
+				bungalow.setDisponible(true);
+				bungalowRepository.save(bungalow);
+				
+				liberados.add(ClienteBungalowMapper.toDto(servicio));
+			}
+		}
+		return liberados;
 	}
 
 }
