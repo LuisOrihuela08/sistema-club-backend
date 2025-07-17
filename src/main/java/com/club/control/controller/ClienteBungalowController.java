@@ -6,7 +6,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -99,5 +101,22 @@ public class ClienteBungalowController {
 													@RequestBody ClienteBungalowDTO dto){
 		ClienteBungalowDTO updated = clienteBungalowService.updateClienteBungalow(id, dto);
 		return ResponseEntity.ok(updated);
+	}
+	
+	@GetMapping("/exportar-pdf")
+	public ResponseEntity<byte[]> exportarPdf(
+	    @RequestParam(required = false) String dni,
+	    @RequestParam(required = false) String metodoPago,
+	    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+	    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+	    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
+
+	    byte[] pdf = clienteBungalowService.exportarPdfFiltrado(dni, metodoPago, fechaInicio, desde, hasta);
+
+	    HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("attachment", "reporte.pdf");
+
+	    return ResponseEntity.ok().headers(headers).body(pdf);
 	}
 }
