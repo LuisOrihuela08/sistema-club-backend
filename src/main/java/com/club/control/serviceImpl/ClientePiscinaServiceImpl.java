@@ -52,12 +52,6 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 	}
 
 	@Override
-	public ClientePiscinaDTO getClientePiscinaId(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public ClientePiscinaDTO saveClientePiscina(ClientePiscinaDTO clientePiscinaDTO) {
 		
 		if(clientePiscinaDTO.getCliente() == null) {
@@ -260,5 +254,21 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService{
 		
 		logger.info("Búsqueda de servicios de piscina por método de pago y entre meses");
 		return pageEntity.map(ClientePiscinaMapper::toDto);
+	}
+
+	@Override
+	public ClientePiscinaDTO findClientePiscinaById(Long id) {
+		
+		if (id == null || id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+		}
+		
+		ClientePiscinaEntity result = clientePiscinaRepository.findById(id).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("Servicio de Piscina no encontrado con el id: " + id);
+		});
+		
+		logger.info("ID ingresado: {}", id);
+		logger.info("Servicio de piscina encontrado: {}", result);
+		return ClientePiscinaMapper.toDto(result);
 	}	
 }

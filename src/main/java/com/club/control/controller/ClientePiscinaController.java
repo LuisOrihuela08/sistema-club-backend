@@ -38,6 +38,11 @@ public class ClientePiscinaController {
 		return ResponseEntity.ok(clientePiscinaService.listAll());
 	}
 	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> getClientePiscinaById(@PathVariable Long id){
+		return ResponseEntity.ok(clientePiscinaService.findClientePiscinaById(id));
+	}
+	
 	@GetMapping("/pagination")
 	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 			 								 @RequestParam ("size") int size){

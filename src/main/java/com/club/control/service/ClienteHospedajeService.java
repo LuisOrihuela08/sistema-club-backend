@@ -11,6 +11,7 @@ import com.club.control.dto.ClienteHospedajeDTO;
 public interface ClienteHospedajeService {
 
 	List<ClienteHospedajeDTO> listAll();
+	ClienteHospedajeDTO findClienteHospedajeById (Long id);
 	Page<ClienteHospedajeDTO> pageClienteHospedaje (Pageable pageable);
 	ClienteHospedajeDTO saveClienteHospedaje (ClienteHospedajeDTO clienteHospedajeDTO);
 	ClienteHospedajeDTO updateClienteHospedaje (Long id, ClienteHospedajeDTO clienteHospedajeDTO);
