@@ -10,13 +10,13 @@ import com.club.control.dto.ClientePiscinaDTO;
 
 public interface ClientePiscinaService {
 
+	ClientePiscinaDTO findClientePiscinaById (Long id);
 	List<ClientePiscinaDTO> listAll();
 	Page<ClientePiscinaDTO> pageClientsPiscina (Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaByFecha (LocalDate fecha, Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaByFechaMonth (int anio, int mes, Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaByClienteDni (String dni, Pageable pageable);
 	Page<ClientePiscinaDTO> pageClientePiscinaMetodoPagoNombreAndFecha (String nombreMetodoPago, LocalDate inicio, LocalDate fin, Pageable pageable);
-	ClientePiscinaDTO getClientePiscinaId (Long id);
 	ClientePiscinaDTO saveClientePiscina (ClientePiscinaDTO clientePiscinaDTO);
 	ClientePiscinaDTO updateClientePiscina (Long id, ClientePiscinaDTO clientePiscinaDTO);
 	void deleteClientePiscina (Long id);

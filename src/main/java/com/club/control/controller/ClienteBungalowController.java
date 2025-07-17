@@ -40,6 +40,11 @@ public class ClienteBungalowController {
 		return ResponseEntity.ok(clienteBungalowService.listAll());
 	}
 	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> getClienteBungalowById (@PathVariable Long id){
+		return ResponseEntity.ok(clienteBungalowService.findClienteBungalowById(id));
+	}
+	
 	@GetMapping("/pagination")
 	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 											@RequestParam ("size") int size){
@@ -47,7 +52,7 @@ public class ClienteBungalowController {
 		Page<ClienteBungalowDTO> pagination = clienteBungalowService.pageClienteBungalow(pageable);
 		return ResponseEntity.ok(pagination);
 	}
-	
+		
 	@GetMapping("/pagination/fecha")
 	public ResponseEntity<?> getPaginationByFechaInicio (@RequestParam ("page") int page,
 														 @RequestParam ("size") int size,

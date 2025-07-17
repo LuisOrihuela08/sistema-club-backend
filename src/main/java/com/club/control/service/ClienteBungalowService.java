@@ -11,9 +11,10 @@ import com.club.control.dto.ClienteBungalowDTO;
 public interface ClienteBungalowService {
 
 	List<ClienteBungalowDTO> listAll();
+	ClienteBungalowDTO findClienteBungalowById (Long id);
 	Page<ClienteBungalowDTO> pageClienteBungalow (Pageable pageable);
 	Page<ClienteBungalowDTO> pageClienteBungalowByFechaInicio (LocalDate fechaInicio, Pageable pageable);
-	Page<ClienteBungalowDTO> pageClienteBungalowByFechasBetween (LocalDate fechaInicio, LocalDate fechaFin, Pageable pageable);
+	Page<ClienteBungalowDTO> pageClienteBungalowByFechasBetween (LocalDate desde, LocalDate hasta, Pageable pageable);
 	Page<ClienteBungalowDTO> pageClienteBungalowByClienteDni (String dni, Pageable pageable);
 	Page<ClienteBungalowDTO> pageClienteBungalowByMetodoPagoAndFechasBetween (String nameMetodoPago, LocalDate desde, LocalDate hasta, Pageable pageable);
 	ClienteBungalowDTO createClienteBungalow (ClienteBungalowDTO clienteBungalowDTO);

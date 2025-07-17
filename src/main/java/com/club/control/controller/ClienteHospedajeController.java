@@ -35,6 +35,12 @@ public class ClienteHospedajeController {
 		return ResponseEntity.ok(clienteHospedajeService.listAll());
 	}
 	
+	@GetMapping("/id/{id}")
+	public ResponseEntity<?> getClienteHospedajeById (@PathVariable Long id){
+		return ResponseEntity.ok(clienteHospedajeService.findClienteHospedajeById(id));
+	}
+	
+	
 	@GetMapping("/pagination")
 	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
 											@RequestParam ("size") int size){

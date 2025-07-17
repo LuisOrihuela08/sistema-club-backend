@@ -333,4 +333,20 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService{
 	    return baos.toByteArray();
     }
 
+	@Override
+	public ClienteBungalowDTO findClienteBungalowById(Long id) {
+		
+		if (id == null || id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+		}
+		
+		ClienteBungalowEntity result = clienteBungalowRepository.findById(id).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("Servicio de Bungalow no encontrado con el id: " + id);
+		});
+		
+		logger.info("ID ingresado: {}", id);
+		logger.info("Servicio de bungalow encontrado: {}", result);
+		return ClienteBungalowMapper.toDto(result);
+	}
+
 }

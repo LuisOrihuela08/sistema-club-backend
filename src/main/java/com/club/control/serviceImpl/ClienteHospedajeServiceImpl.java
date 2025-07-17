@@ -257,4 +257,20 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService{
 		return result.map(ClienteHospedajeMapper::toDto);
 	}
 
+	@Override
+	public ClienteHospedajeDTO findClienteHospedajeById(Long id) {
+		
+		if (id == null || id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+		}
+		
+		ClienteHospedajeEntity result = clienteHospedajeRepository.findById(id).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("Servicio de Hospedaje no encontrado con el id: " + id);
+		});
+		
+		logger.info("ID ingresado: {}", id);
+		logger.info("Servicio de Hospedaje encontrado: {}", result);
+		return ClienteHospedajeMapper.toDto(result);
+	}
+
 }
