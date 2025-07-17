@@ -1,8 +1,11 @@
 package com.club.control.controller;
 
+import java.time.LocalDate;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -34,10 +37,19 @@ public class ClienteHospedajeController {
 	
 	@GetMapping("/pagination")
 	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
-											 @RequestParam ("size") int size){
+											@RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteHospedajeDTO> pagination = clienteHospedajeService.pageClienteHospedaje(pageable);
 		return ResponseEntity.ok(pagination);
+	}
+	
+	@GetMapping("/pagination/fecha")
+	public ResponseEntity<?> getPaginationByFechaInicio (@RequestParam ("page") int page,
+														 @RequestParam ("size") int size,
+														 @RequestParam ("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<ClienteHospedajeDTO> result = clienteHospedajeService.pageClienteHospedajeByFechaInicio(fechaInicio, pageable);
+		return ResponseEntity.ok(result);
 	}
 	
 	@PostMapping("/")

@@ -15,4 +15,5 @@ public interface ClienteHospedajeService {
 	ClienteHospedajeDTO saveClienteHospedaje (ClienteHospedajeDTO clienteHospedajeDTO);
 	ClienteHospedajeDTO updateClienteHospedaje (Long id, ClienteHospedajeDTO clienteHospedajeDTO);
 	List<ClienteHospedajeDTO> liberarHospedajeFinalizado (LocalDate fecha);
+	Page<ClienteHospedajeDTO> pageClienteHospedajeByFechaInicio (LocalDate fechaInicio, Pageable pageable);
 }
