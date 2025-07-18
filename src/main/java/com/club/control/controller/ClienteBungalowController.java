@@ -124,4 +124,15 @@ public class ClienteBungalowController {
 
 	    return ResponseEntity.ok().headers(headers).body(pdf);
 	}
+	
+	@GetMapping("/exportar-pdf/id/{id}")
+	public ResponseEntity<byte[]> exportarPdfClienteBungalowById (@PathVariable Long id){
+		byte[] pdf = clienteBungalowService.exportarPdfClienteBungalowById(id);
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("attachment", "reporte.pdf");
+	    
+	    return ResponseEntity.ok().headers(headers).body(pdf);
+	}
 }

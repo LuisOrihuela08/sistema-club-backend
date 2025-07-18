@@ -511,7 +511,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			throw new IllegalArgumentException("Hubo un error al generar el PDF");
 		}
 
-		logger.info("PDF generado Exitosamente !");
+		logger.info("PDF generado Exitosamente del servicio de piscina con el id: {}", id);
 		return baos.toByteArray();
 	}
 }
