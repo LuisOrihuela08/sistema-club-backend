@@ -21,6 +21,9 @@ public interface ClientePiscinaService {
 	ClientePiscinaDTO updateClientePiscina (Long id, ClientePiscinaDTO clientePiscinaDTO);
 	void deleteClientePiscina (Long id);
 	
-	//Esto es para generar PDF
+	//Esto es para generar PDF por filtros
 	byte[] exportarPdfFiltradoClientePiscina (String dni, String nombreMetodoPago, LocalDate fecha, LocalDate desde, LocalDate hasta);
+
+	//Para generar PDF por servicio piscina
+	byte[] exportarPdfClientePiscinaById (Long id);
 }

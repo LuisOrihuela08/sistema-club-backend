@@ -127,4 +127,15 @@ public class ClientePiscinaController {
 
 	    return ResponseEntity.ok().headers(headers).body(pdf);
 	}
+	
+	@GetMapping("/exportar-pdf/id/{id}")
+	public ResponseEntity<byte[]> exportarPdfById(@PathVariable Long id){
+		byte[] pdf = clientePiscinaService.exportarPdfClientePiscinaById(id);
+		
+		HttpHeaders headers = new HttpHeaders();
+	    headers.setContentType(MediaType.APPLICATION_PDF);
+	    headers.setContentDispositionFormData("attachment", "reporte.pdf");
+	    
+	    return ResponseEntity.ok().headers(headers).body(pdf);
+	}
 }
