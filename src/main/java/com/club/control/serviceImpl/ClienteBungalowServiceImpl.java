@@ -357,12 +357,12 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header3);
 
-			PdfPCell header4 = new PdfPCell(new Phrase("Fecha Inicio", headerFont));
+			PdfPCell header4 = new PdfPCell(new Phrase("Fecha Ingreso", headerFont));
 			header4.setBackgroundColor(new Color(63, 169, 219));
 			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header4);
 			
-			PdfPCell header5 = new PdfPCell(new Phrase("Fecha Fin", headerFont));
+			PdfPCell header5 = new PdfPCell(new Phrase("Fecha Salida", headerFont));
 			header5.setBackgroundColor(new Color(63, 169, 219));
 			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header5);
@@ -413,6 +413,115 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 		logger.info("ID ingresado: {}", id);
 		logger.info("Servicio de bungalow encontrado: {}", result);
 		return ClienteBungalowMapper.toDto(result);
+	}
+
+	@Override
+	public byte[] exportarPdfClienteBungalowById(Long id) {
+		
+		if (id == null || id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser nulo o menor/igual a 0");
+		}
+		ClienteBungalowEntity entity = clienteBungalowRepository.findById(id).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("Servicio de Bungalow no encontrado con el id: " + id);
+		});
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+		Document document = new Document(PageSize.A4);
+		
+		try {
+			
+			PdfWriter.getInstance(document, baos);
+			document.open();
+
+			// Títulos y Encabezados
+			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
+			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
+			Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD, Color.WHITE);
+
+			// Encabezado Mejorado
+			PdfPTable tableEncabezado = new PdfPTable(2);
+			tableEncabezado.setWidthPercentage(100);
+			tableEncabezado.setSpacingAfter(10f);
+			tableEncabezado.setWidths(new float[] { 50, 50 });
+
+			// Título centrado que ocupa las dos columnas
+			PdfPCell header0 = new PdfPCell(new Paragraph("REPORTE DE SERVICIO DE BUNGALOW", titleFont));
+			header0.setColspan(2); // Ocupa las dos columnas
+			header0.setBackgroundColor(new Color(63, 169, 219)); // 0, 102, 204 Azul oscuro
+			header0.setHorizontalAlignment(Element.ALIGN_CENTER);
+			header0.setVerticalAlignment(Element.ALIGN_MIDDLE);
+			header0.setPadding(15f);
+			tableEncabezado.addCell(header0);
+			document.add(tableEncabezado);
+
+			document.add(new Paragraph("Club Campestre Sol S.A.C", infoFont));
+			document.add(new Paragraph("RUC: 4250125244", infoFont));
+			document.add(new Paragraph("Mz L3 Lt35 Los Alamos", infoFont));
+			document.add(new Paragraph("CHACLACAYO - LIMA", infoFont));
+			document.add(new Paragraph("Fecha del reporte: " + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+					infoFont));
+			document.add(Chunk.NEWLINE);
+
+			// Tabla con columnas personalizadas
+			PdfPTable table = new PdfPTable(7); // 7 columnas
+			table.setWidthPercentage(100);
+			table.setSpacingBefore(10f);
+			table.setSpacingAfter(10f);
+
+			PdfPCell header1 = new PdfPCell(new Phrase("Bungalow", headerFont));
+			header1.setBackgroundColor(new Color(63, 169, 219));
+			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header1);
+
+			PdfPCell header2 = new PdfPCell(new Phrase("Cliente", headerFont));
+			header2.setBackgroundColor(new Color(63, 169, 219));
+			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header2);
+
+			PdfPCell header3 = new PdfPCell(new Phrase("DNI", headerFont));
+			header3.setBackgroundColor(new Color(63, 169, 219));
+			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header3);
+
+			PdfPCell header4 = new PdfPCell(new Phrase("Fecha Ingreso", headerFont));
+			header4.setBackgroundColor(new Color(63, 169, 219));
+			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header4);
+			
+			PdfPCell header5 = new PdfPCell(new Phrase("Fecha Salida", headerFont));
+			header5.setBackgroundColor(new Color(63, 169, 219));
+			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header5);
+			
+			PdfPCell header6 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			header6.setBackgroundColor(new Color(63, 169, 219));
+			header6.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header6);
+			
+			PdfPCell header7 = new PdfPCell(new Phrase("Total (S/)", headerFont));
+			header7.setBackgroundColor(new Color(63, 169, 219));
+			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header7);
+
+			// Datos del servicio de piscina requerido
+			table.addCell(entity.getBungalow().getCodigo());
+			table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
+			table.addCell(entity.getCliente().getDni());
+			table.addCell(entity.getFechaInicio().toString());
+			table.addCell(entity.getFechaFin().toString());
+			table.addCell(entity.getMetodoPago().getName());
+			table.addCell(entity.getMontoTotal().toString());
+
+			document.add(table);
+			document.add(Chunk.NEWLINE);
+			document.close();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			throw new IllegalArgumentException("Hubo un error al generar el PDF");
+		}
+		logger.info("PDF generado Exitosamente del servicio de bungalow con el id: {}", id);
+		return baos.toByteArray();
 	}
 
 }

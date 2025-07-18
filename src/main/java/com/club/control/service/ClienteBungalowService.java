@@ -21,6 +21,9 @@ public interface ClienteBungalowService {
 	ClienteBungalowDTO updateClienteBungalow (Long id, ClienteBungalowDTO clienteBungalowDTO);
 	List<ClienteBungalowDTO> liberarBungalowFinalizado (LocalDate fecha);
 	
-	//Esto es para generar PDF
+	//Esto es para generar PDF por filtros
 	 byte[] exportarPdfFiltrado(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde, LocalDate hasta);
+
+	 //Esto es para generar PDF por servicios de bungalow
+	 byte[] exportarPdfClienteBungalowById (Long id);
 }
