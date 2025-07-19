@@ -1,0 +1,68 @@
+#Aca los querys para hacer consultas por el id
+type Query{
+	findClienteBungalowById(id: ID!): ClienteBungalowDTO,
+	findClienteHospedajeById(id: ID!): ClienteHospedajeDTO
+}
+
+#Mapeando mis DTOs para el servicio de Bungalows
+type ClienteBungalowDTO{
+	id: ID,
+	montoTotal: Float,
+	fechaInicio: String,
+	fechaFin: String,
+	cliente: ClienteDTO,
+	bungalow: BungalowDTO,
+	metodoPago: MetodoPagoDTO
+}
+
+type BungalowDTO{
+	id: ID,
+	codigo: String,
+	capacidad: Int,
+	precio: Float,
+	descripcion: String,
+	disponible: Boolean
+
+}
+
+type MetodoPagoDTO{
+	id: ID,
+	name: String
+}
+
+type ClienteDTO{
+	id: ID,
+	name: String,
+	lastName: String,
+	dni: String,
+	district: String,
+	telephone: String
+}
+
+#Mapeando mis DTOs para el servicio de Hospedaje
+type ClienteHospedajeDTO{
+	id: ID,
+	montoTotal: Float,
+	fechaInicio: String,
+	fechaFin: String,
+	cliente: ClienteDTO,
+	metodoPago: MetodoPagoDTO,
+	hospedaje: HospedajeDTO
+}
+
+type HospedajeDTO{
+	id: ID,
+	codigoHabitacion: String,
+	precio: Float,
+	capacidad: Int, 
+	descripcion: String,
+	disponible: Boolean,
+	tipoHabitacion: TipoHabitacion
+}
+
+enum TipoHabitacion{
+	SIMPLE,
+	DOBLE,
+	MATRIMONIAL,
+	SUITE
+}

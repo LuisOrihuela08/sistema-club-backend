@@ -26,6 +26,11 @@ spring:
       hibernate:
         format_sql: true
 
+api:
+  reniec:
+    url: ${API_URL}
+    token: ${API_TOKEN}
+    
 ---
 server:
   forward-headers-strategy: framework  # Habilita detección de protocolo HTTPS en producción    
