@@ -9,13 +9,17 @@ import org.springframework.stereotype.Controller;
 
 import com.club.control.dto.ClienteBungalowDTO;
 import com.club.control.dto.ClienteHospedajeDTO;
+import com.club.control.dto.ClientePiscinaDTO;
 import com.club.control.entity.ClienteBungalowEntity;
 import com.club.control.entity.ClienteHospedajeEntity;
+import com.club.control.entity.ClientePiscinaEntity;
 import com.club.control.error.RecursosNoEncontradosException;
 import com.club.control.mapper.ClienteBungalowMapper;
 import com.club.control.mapper.ClienteHospedajeMapper;
+import com.club.control.mapper.ClientePiscinaMapper;
 import com.club.control.repository.ClienteBungalowRepository;
 import com.club.control.repository.ClienteHospedajeRepository;
+import com.club.control.repository.ClientePiscinaRepository;
 
 @Controller
 public class ClienteBungalowGrapghQLController {
@@ -24,11 +28,14 @@ public class ClienteBungalowGrapghQLController {
 
 	private final ClienteBungalowRepository clienteBungalowRepository;
 	private final ClienteHospedajeRepository clienteHospedajeRepository;
+	private final ClientePiscinaRepository clientePiscinaRepository;
 
 	public ClienteBungalowGrapghQLController(ClienteBungalowRepository clienteBungalowRepository,
-			ClienteHospedajeRepository clienteHospedajeRepository) {
+											 ClienteHospedajeRepository clienteHospedajeRepository,
+											 ClientePiscinaRepository clientePiscinaRepository) {
 		this.clienteBungalowRepository = clienteBungalowRepository;
 		this.clienteHospedajeRepository = clienteHospedajeRepository;
+		this.clientePiscinaRepository = clientePiscinaRepository;
 	}
 
 	@QueryMapping(name = "findClienteBungalowById")
@@ -76,4 +83,28 @@ public class ClienteBungalowGrapghQLController {
 			throw new RuntimeException("Error al encontrar el servicio de Bungalow: " + e.getMessage());
 		}
 	}
-}
+	
+	@QueryMapping(name = "findClientePiscinaById")
+	public ClientePiscinaDTO findClientePiscinaById(@Argument(name = "id") Long id) {
+		
+		if (id == null || id <= 0) {
+			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+		}
+		
+		try {
+			
+			ClientePiscinaEntity result = clientePiscinaRepository.findById(id).orElseThrow(() -> {
+				throw new RecursosNoEncontradosException("No se encontró servicio de piscina con el id: " + id);
+			});
+			
+			logger.info("GraphQL - Búsqueda de Servicio de Piscina");
+			logger.info("Servicio de piscina encontrado con el id: {}", result);
+			return ClientePiscinaMapper.toDto(result);
+			
+		} catch (Exception e) {
+			e.getStackTrace();
+			logger.error("Error al encontrar el servicio de Piscina: {}", e);
+			throw new RuntimeException("Error al encontrar el servicio de Piscina: " + e.getMessage());
+		}
+	}
+ }
