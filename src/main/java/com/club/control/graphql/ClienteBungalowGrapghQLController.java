@@ -24,6 +24,7 @@ import com.club.control.repository.ClientePiscinaRepository;
 @Controller
 public class ClienteBungalowGrapghQLController {
 
+	private static final String ID_INVALIDO = "El id no puede ser nulo ó menor/igual a 0";
 	private static final Logger logger = LoggerFactory.getLogger(ClienteBungalowGrapghQLController.class);
 
 	private final ClienteBungalowRepository clienteBungalowRepository;
@@ -42,7 +43,7 @@ public class ClienteBungalowGrapghQLController {
 	public ClienteBungalowDTO findClienteBungalowById(@Argument(name = "id") Long id) {
 
 		if (id == null || id <= 0) {
-			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+			throw new IllegalArgumentException(ID_INVALIDO);
 		}
 
 		try {
@@ -54,9 +55,8 @@ public class ClienteBungalowGrapghQLController {
 			logger.info("Servicio de bungalow encontrado con el id: {}", result);
 			return ClienteBungalowMapper.toDto(result);
 		} catch (Exception e) {
-			e.getStackTrace();
-			logger.error("Error al encontrar el servicio de Bungalow: {}", e);
-			throw new RuntimeException("Error al encontrar el servicio de Bungalow: " + e.getMessage());
+			logger.error("Error al encontrar el servicio de Bungalow", e);
+			throw new IllegalArgumentException("Error al obtener el bungalow con ID: " +id ,e);
 		}
 	}
 
@@ -64,7 +64,7 @@ public class ClienteBungalowGrapghQLController {
 	public ClienteHospedajeDTO findClienteHospedajeById(@Argument(name = "id") Long id) {
 
 		if (id == null || id <= 0) {
-			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+			throw new IllegalArgumentException(ID_INVALIDO);
 		}
 
 		try {
@@ -78,9 +78,8 @@ public class ClienteBungalowGrapghQLController {
 			return ClienteHospedajeMapper.toDto(result);
 
 		} catch (Exception e) {
-			e.getStackTrace();
-			logger.error("Error al encontrar el servicio de Bungalow: {}", e);
-			throw new RuntimeException("Error al encontrar el servicio de Bungalow: " + e.getMessage());
+			logger.error("Error al encontrar el servicio de Hospedaje", e);
+			throw new IllegalArgumentException("Error al obtener el hospedaje con ID: " + id , e);
 		}
 	}
 	
@@ -88,7 +87,7 @@ public class ClienteBungalowGrapghQLController {
 	public ClientePiscinaDTO findClientePiscinaById(@Argument(name = "id") Long id) {
 		
 		if (id == null || id <= 0) {
-			throw new IllegalArgumentException("El id no puede ser nulo ó menor/igual a 0");
+			throw new IllegalArgumentException(ID_INVALIDO);
 		}
 		
 		try {
@@ -103,8 +102,8 @@ public class ClienteBungalowGrapghQLController {
 			
 		} catch (Exception e) {
 			e.getStackTrace();
-			logger.error("Error al encontrar el servicio de Piscina: {}", e);
-			throw new RuntimeException("Error al encontrar el servicio de Piscina: " + e.getMessage());
+			logger.error("Error al encontrar el servicio de Piscina", e);
+			throw new IllegalArgumentException ("Error al obtener el servicio de piscina con ID: " +id , e);
 		}
 	}
  }

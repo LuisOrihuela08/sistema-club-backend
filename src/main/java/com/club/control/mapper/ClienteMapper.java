@@ -5,6 +5,11 @@ import com.club.control.entity.ClienteEntity;
 
 public class ClienteMapper {
 
+	 // Constructor privado para evitar instanciación
+    private ClienteMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
 	public static ClienteEntity toEntity (ClienteDTO dto) {
 		ClienteEntity entity = new ClienteEntity();
 		entity.setId(dto.getId());

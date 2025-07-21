@@ -1,4 +1,4 @@
-package com.club.control.serviceImpl;
+package com.club.control.serviceimpl;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
@@ -6,7 +6,6 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -39,6 +38,7 @@ import com.lowagie.text.pdf.PdfWriter;
 public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 
 	private static final Logger logger = LoggerFactory.getLogger(ClientePiscinaServiceImpl.class);
+	private static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd";
 
 	private final ClienteRepository clienteRepository;
 
@@ -58,7 +58,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 
 		List<ClientePiscinaEntity> list = clientePiscinaRepository.findAll();
 		logger.info("Listado del Servicio de piscina OK");
-		return list.stream().map(ClientePiscinaMapper::toDto).collect(Collectors.toList());
+		return list.stream().map(ClientePiscinaMapper::toDto).toList();
 	}
 
 	@Override
@@ -344,7 +344,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.add(new Paragraph("RUC: 4250125244", infoFont));
 			document.add(new Paragraph("Mz L3 Lt35 Los Alamos", infoFont));
 			document.add(new Paragraph("CHACLACAYO - LIMA", infoFont));
-			document.add(new Paragraph("Fecha: " + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+			document.add(new Paragraph("Fecha: " + LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)),
 					infoFont));
 			document.add(Chunk.NEWLINE);
 
@@ -398,7 +398,8 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.add(Chunk.NEWLINE);
 			document.close();
 		} catch (Exception e) {
-			e.printStackTrace();
+			logger.error("Ocurrió un error al generar el PDF de reporte de servicios de piscina", e);
+			throw new IllegalArgumentException("Ocurrió un error al generar el PDF de reporte de servicios de piscina");
 		}
 
 		logger.info("PDF generado Exitosamente !");
@@ -449,9 +450,9 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.add(new Paragraph("RUC: 4250125244", infoFont));
 			document.add(new Paragraph("Mz L3 Lt35 Los Alamos", infoFont));
 			document.add(new Paragraph("CHACLACAYO - LIMA", infoFont));
-			document.add(new Paragraph("Fecha del reporte: " + LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+			document.add(new Paragraph("Fecha del reporte: " + LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)),
 					infoFont));
-			document.add(new Paragraph("Fecha del servicio: " + entity.getFecha().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")),
+			document.add(new Paragraph("Fecha del servicio: " + entity.getFecha().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)),
 					infoFont));
 			document.add(new Paragraph("Precio unitario: " + entity.getPrecioUnitario(), infoFont));
 			document.add(Chunk.NEWLINE);
@@ -505,8 +506,8 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.close();
 		    
 		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IllegalArgumentException("Hubo un error al generar el PDF");
+			logger.error("Ocurrió un error al generar el PDF de reporte del servicio de piscina", e);
+			throw new IllegalArgumentException("Ocurrió un error al generar el PDF de reporte del servicio de piscina");
 		}
 
 		logger.info("PDF generado Exitosamente del servicio de piscina con el id: {}", id);

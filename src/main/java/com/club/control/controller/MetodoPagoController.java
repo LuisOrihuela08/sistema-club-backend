@@ -1,6 +1,7 @@
 package com.club.control.controller;
 
 
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.http.HttpStatus;
@@ -28,30 +29,30 @@ public class MetodoPagoController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> getAllMetodosPago (){
+	public ResponseEntity<List<MetodoPagoDTO>> getAllMetodosPago (){
 		return ResponseEntity.ok(metodoPagoService.listAll());
 	}
 	
 	@GetMapping("/name/{name}")
-	public ResponseEntity<?> getMetodoByName(@PathVariable String name){
+	public ResponseEntity<MetodoPagoDTO> getMetodoByName(@PathVariable String name){
 		return ResponseEntity.ok(metodoPagoService.findName(name));
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createMetodoPago (@RequestBody MetodoPagoDTO dto){
+	public ResponseEntity<MetodoPagoDTO> createMetodoPago (@RequestBody MetodoPagoDTO dto){
 		MetodoPagoDTO metodoSave = metodoPagoService.saveMetodo(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(metodoSave);
 	}
 	
 	@PutMapping("/{id}")
-	public ResponseEntity<?> updateMetodo(@PathVariable Long id,
+	public ResponseEntity<MetodoPagoDTO> updateMetodo(@PathVariable Long id,
 										  @RequestBody MetodoPagoDTO dto){
 		MetodoPagoDTO metodoUpdate = metodoPagoService.updateMetodo(id, dto);
 		return ResponseEntity.status(HttpStatus.OK).body(metodoUpdate);
 	}
 	
 	@DeleteMapping("/id/{id}")
-	public ResponseEntity<?> deleteMetodoPago (@PathVariable Long id){
+	public ResponseEntity<Map<String, String>> deleteMetodoPago (@PathVariable Long id){
 		metodoPagoService.deleteMetodo(id);
 		return new ResponseEntity<>(Map.of("message", "Método de pago eliminado exitosamente"), HttpStatus.OK);
 	}

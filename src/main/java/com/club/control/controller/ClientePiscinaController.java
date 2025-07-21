@@ -1,6 +1,7 @@
 package com.club.control.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.domain.Page;
@@ -36,17 +37,17 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> findAll (){
+	public ResponseEntity<List<ClientePiscinaDTO>> findAll (){
 		return ResponseEntity.ok(clientePiscinaService.listAll());
 	}
 	
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getClientePiscinaById(@PathVariable Long id){
+	public ResponseEntity<ClientePiscinaDTO> getClientePiscinaById(@PathVariable Long id){
 		return ResponseEntity.ok(clientePiscinaService.findClientePiscinaById(id));
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClientePiscinaDTO>> getPagination (@RequestParam ("page") int page,
 			 								 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 		Page<ClientePiscinaDTO> pagination = clientePiscinaService.pageClientsPiscina(pageable);
@@ -54,7 +55,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/fecha")
-	public ResponseEntity<?> getPaginationByFecha (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClientePiscinaDTO>> getPaginationByFecha (@RequestParam ("page") int page,
 			 										@RequestParam ("size") int size,
 			 										@RequestParam ("fecha")@DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fecha){
 		Pageable pageable = PageRequest.of(page, size);
@@ -63,7 +64,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/fecha-between")
-	public ResponseEntity<?> getPaginationByFechaMonth (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClientePiscinaDTO>> getPaginationByFechaMonth (@RequestParam ("page") int page,
 														 @RequestParam ("size") int size,
 														 @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
 					 									 @RequestParam ("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta){
@@ -72,7 +73,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/dni")
-	public ResponseEntity<?> getByPaginationByClienteDni (@RequestParam("dni") String dni,
+	public ResponseEntity<Page<ClientePiscinaDTO>> getByPaginationByClienteDni (@RequestParam("dni") String dni,
 		    											   @RequestParam("page") int page,
 		    											   @RequestParam("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
@@ -80,7 +81,7 @@ public class ClientePiscinaController {
 	}
 	
 	@GetMapping("/pagination/metodo-pago-fecha")
-	public ResponseEntity<?> getByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
+	public ResponseEntity<Page<ClientePiscinaDTO>> getByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
 		    													 @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
 		    													 @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
 		    													 @RequestParam("page") int page,
@@ -91,13 +92,13 @@ public class ClientePiscinaController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createServicePiscina (@RequestBody ClientePiscinaDTO dto){
+	public ResponseEntity<ClientePiscinaDTO> createServicePiscina (@RequestBody ClientePiscinaDTO dto){
 		ClientePiscinaDTO saved = clientePiscinaService.saveClientePiscina(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 	
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> update (@PathVariable Long id,
+	public ResponseEntity<ClientePiscinaDTO> update (@PathVariable Long id,
 									 @RequestBody ClientePiscinaDTO dto){
 		
 		ClientePiscinaDTO updated = clientePiscinaService.updateClientePiscina(id, dto);
@@ -105,7 +106,7 @@ public class ClientePiscinaController {
 	}
 	
 	@DeleteMapping("/id/{id}")
-	public ResponseEntity<?> delete (@PathVariable Long id){
+	public ResponseEntity<Map<String, String>> delete (@PathVariable Long id){
 		clientePiscinaService.deleteClientePiscina(id);
 		return new ResponseEntity<>(Map.of("mensaje", "Servicio de piscina eliminado exitosamente"),
 										 HttpStatus.OK);

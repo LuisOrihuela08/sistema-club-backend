@@ -1,7 +1,6 @@
-package com.club.control.serviceImpl;
+package com.club.control.serviceimpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -79,14 +78,7 @@ public class ClienteServiceImpl implements ClienteService {
 		
 		List<ClienteEntity> clientes = clienteRepository.findAll();
 		logger.info("Listado de clientes OK");
-		return clientes.stream().map(ClienteMapper::toDto)
-								.collect(Collectors.toList());
-	}
-
-	@Override
-	public void deleteClient(Long id) {
-		// TODO Auto-generated method stub
-
+		return clientes.stream().map(ClienteMapper::toDto).toList();
 	}
 
 	@Override

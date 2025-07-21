@@ -1,7 +1,6 @@
-package com.club.control.serviceImpl;
+package com.club.control.serviceimpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -29,7 +28,7 @@ public class MetodoPagoServiceImpl implements MetodoPagoService {
 	public List<MetodoPagoDTO> listAll() {
 		List<MetodoPagoEntity> metodos = metodoPagoRepository.findAll();
 		logger.info("Listado de Método de Pago OK");
-		return metodos.stream().map(MetodoPagoMapper::toDto).collect(Collectors.toList());
+		return metodos.stream().map(MetodoPagoMapper::toDto).toList();
 	}
 
 	@Override

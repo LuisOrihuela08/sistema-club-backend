@@ -1,5 +1,7 @@
 package com.club.control.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +30,12 @@ public class HospedajeController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> findAll (){
+	public ResponseEntity<List<HospedajeDTO>> findAll (){
 		return ResponseEntity.ok(hospedajeService.listAll());
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
+	public ResponseEntity<Page<HospedajeDTO>> getPagination (@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<HospedajeDTO> pagination = hospedajeService.pageHospedaje(pageable);
@@ -41,13 +43,13 @@ public class HospedajeController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createHospedaje (@RequestBody HospedajeDTO hospedajeDTO){
+	public ResponseEntity<HospedajeDTO> createHospedaje (@RequestBody HospedajeDTO hospedajeDTO){
 		HospedajeDTO saved = hospedajeService.saveHospedaje(hospedajeDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 	
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> updateHospedaje (@PathVariable Long id,
+	public ResponseEntity<HospedajeDTO> updateHospedaje (@PathVariable Long id,
 											  @RequestBody HospedajeDTO hospedajeDTO){
 		HospedajeDTO updated = hospedajeService.updateHospedaje(id, hospedajeDTO);
 		return ResponseEntity.ok(updated);

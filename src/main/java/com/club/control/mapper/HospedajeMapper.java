@@ -5,6 +5,11 @@ import com.club.control.entity.HospedajeEntity;
 
 public class HospedajeMapper {
 
+	 // Constructor privado para evitar instanciación
+    private HospedajeMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
 	public static HospedajeEntity toEntity (HospedajeDTO dto) {
 		
 		HospedajeEntity entity = new HospedajeEntity();
