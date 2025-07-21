@@ -41,8 +41,9 @@ jobs:
         run: ./mvnw clean package -DskipTests
 
       - name: SonarQubeCloud Scan
-        run: mvn verify sonar:sonar \
-          -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
-          -Dsonar.organization=luisorihuela08 \
-          -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: |
+          ./mvnw verify sonar:sonar \
+            -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
+            -Dsonar.organization=luisorihuela08 \
+            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
