@@ -1,6 +1,8 @@
 package com.club.control.controller;
 
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -30,12 +32,12 @@ public class BungalowController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> listdAll (){
+	public ResponseEntity<List<BungalowDTO>> listdAll (){
 		return ResponseEntity.ok(bungalowService.findAll());
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
+	public ResponseEntity<Page<BungalowDTO>> getPagination (@RequestParam ("page") int page,
 											@RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<BungalowDTO> pagination = bungalowService.pageBungalow(pageable);
@@ -43,12 +45,12 @@ public class BungalowController {
 	}
 	
 	@GetMapping("/codigo/{codigo}")
-	public ResponseEntity<?> getBungalowByCodigo (@PathVariable String codigo){
+	public ResponseEntity<BungalowDTO> getBungalowByCodigo (@PathVariable String codigo){
 		return ResponseEntity.ok(bungalowService.findBungalowByCodigo(codigo));
 	}
 	
 	@GetMapping("/disponibilidad")
-	public ResponseEntity<?> getBungalowsDisponibles (@RequestParam ("page") int page,
+	public ResponseEntity<Page<BungalowDTO>> getBungalowsDisponibles (@RequestParam ("page") int page,
 													  @RequestParam ("size") int size,
 													  @RequestParam ("disponible") boolean disponible){
 		Pageable pageable = PageRequest.of(page, size);
@@ -57,20 +59,20 @@ public class BungalowController {
 	}
 	
 	@PatchMapping("/{id}/disponibilidad")
-	public ResponseEntity<?> updateDisponibility (@PathVariable Long id,
+	public ResponseEntity<BungalowDTO> updateDisponibility (@PathVariable Long id,
 												  @RequestParam ("disponible") boolean disponible){
 		BungalowDTO dto = bungalowService.updateDisponibility(id, disponible);
 		return ResponseEntity.ok(dto);
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createBungalow (@RequestBody BungalowDTO bungalowDTO){
+	public ResponseEntity<BungalowDTO> createBungalow (@RequestBody BungalowDTO bungalowDTO){
 		BungalowDTO bungalowSaved = bungalowService.saveBungalow(bungalowDTO);
 		return ResponseEntity.status(HttpStatus.CREATED).body(bungalowSaved);
 	}
 	
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> updateBungalow (@PathVariable Long id,
+	public ResponseEntity<BungalowDTO> updateBungalow (@PathVariable Long id,
 											 @RequestBody BungalowDTO dto){
 		
 		BungalowDTO bungalowUpdated = bungalowService.updateBungalow(id, dto);

@@ -1,7 +1,6 @@
-package com.club.control.serviceImpl;
+package com.club.control.serviceimpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,7 @@ public class HospedajeServiceImpl implements HospedajeService{
 		
 		List<HospedajeEntity> list = hospedajeRepository.findAll();
 		logger.info("Listado de hospedajes OK");
-		return list.stream().map(HospedajeMapper::toDto)
-							.collect(Collectors.toList());
+		return list.stream().map(HospedajeMapper::toDto).toList();
 	}
 
 	@Override

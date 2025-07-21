@@ -19,7 +19,7 @@ public class ApiReniecController {
 	}
 	
 	@PostMapping("/dni/{dni}")
-	public ResponseEntity<?> consulApiReniec (@PathVariable String dni){
+	public ResponseEntity<String> consulApiReniec (@PathVariable String dni){
 		return ResponseEntity.ok(apiReniecService.consultarPersonaDni(dni));
 	}
 }

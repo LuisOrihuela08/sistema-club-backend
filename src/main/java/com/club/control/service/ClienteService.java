@@ -15,6 +15,5 @@ public interface ClienteService {
 	ClienteDTO getClientByDni (String dni);
 	List<ClienteDTO> listClients();
 	Page<ClienteDTO> pageClients(Pageable pageable);
-	void deleteClient (Long id);
 	
 }

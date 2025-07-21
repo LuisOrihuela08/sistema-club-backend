@@ -1,6 +1,7 @@
 package com.club.control.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,17 +37,17 @@ public class ClienteBungalowController {
 	}
 	
 	@GetMapping("/")
-	public ResponseEntity<?> getAll(){
+	public ResponseEntity<List<ClienteBungalowDTO>> getAll(){
 		return ResponseEntity.ok(clienteBungalowService.listAll());
 	}
 	
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getClienteBungalowById (@PathVariable Long id){
+	public ResponseEntity<ClienteBungalowDTO> getClienteBungalowById (@PathVariable Long id){
 		return ResponseEntity.ok(clienteBungalowService.findClienteBungalowById(id));
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPagination (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteBungalowDTO>> getPagination (@RequestParam ("page") int page,
 											@RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteBungalowDTO> pagination = clienteBungalowService.pageClienteBungalow(pageable);
@@ -54,7 +55,7 @@ public class ClienteBungalowController {
 	}
 		
 	@GetMapping("/pagination/fecha")
-	public ResponseEntity<?> getPaginationByFechaInicio (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteBungalowDTO>> getPaginationByFechaInicio (@RequestParam ("page") int page,
 														 @RequestParam ("size") int size,
 														 @RequestParam ("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio){
 		Pageable pageable = PageRequest.of(page, size);
@@ -63,7 +64,7 @@ public class ClienteBungalowController {
 	}
 	
 	@GetMapping("/pagination/fecha-between")
-	public ResponseEntity<?> getPaginationByFechaBetween (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteBungalowDTO>> getPaginationByFechaBetween (@RequestParam ("page") int page,
 			 											  @RequestParam ("size") int size,
 			 											  @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
 			 											  @RequestParam ("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta){
@@ -73,7 +74,7 @@ public class ClienteBungalowController {
 	}
 	
 	@GetMapping("/pagination/cliente-dni")
-	public ResponseEntity<?> getPaginationByClienteDni (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteBungalowDTO>> getPaginationByClienteDni (@RequestParam ("page") int page,
 			  								   		    @RequestParam ("size") int size,
 			  								   		    @RequestParam ("dni") String dni){
 		Pageable pageable = PageRequest.of(page, size);
@@ -82,7 +83,7 @@ public class ClienteBungalowController {
 	}
 	
 	@GetMapping("/pagination/metodoPago/fecha-between")
-	public ResponseEntity<?> getPaginationByMetodoPagoAndFechaBetween (@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteBungalowDTO>> getPaginationByMetodoPagoAndFechaBetween (@RequestParam ("page") int page,
 	   		    													   @RequestParam ("size") int size,
 	   		    													   @RequestParam ("nameMetodoPago") String nameMetodoPago,
 	   		    													   @RequestParam ("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
@@ -93,16 +94,13 @@ public class ClienteBungalowController {
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createClienteBungalow (@RequestBody ClienteBungalowDTO dto){
-		System.out.println("DTO recibido: " + dto);
-	    System.out.println("Cliente: " + dto.getCliente());;
-		
+	public ResponseEntity<ClienteBungalowDTO> createClienteBungalow (@RequestBody ClienteBungalowDTO dto){	
 		ClienteBungalowDTO saved = clienteBungalowService.createClienteBungalow(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(saved);
 	}
 	
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> updateClienteBungalow (@PathVariable Long id,
+	public ResponseEntity<ClienteBungalowDTO> updateClienteBungalow (@PathVariable Long id,
 													@RequestBody ClienteBungalowDTO dto){
 		ClienteBungalowDTO updated = clienteBungalowService.updateClienteBungalow(id, dto);
 		return ResponseEntity.ok(updated);

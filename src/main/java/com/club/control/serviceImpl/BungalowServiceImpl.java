@@ -1,7 +1,6 @@
-package com.club.control.serviceImpl;
+package com.club.control.serviceimpl;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,8 +31,7 @@ public class BungalowServiceImpl implements BungalowService{
 		
 		List<BungalowEntity> bungalows = bungalowRepository.findAll();		
 		logger.info("Listado de bungalows OK");
-		return bungalows.stream().map(BungalowMapper::toDto)
-								 .collect(Collectors.toList());
+		return bungalows.stream().map(BungalowMapper::toDto).toList();
 	}
 
 	@Override

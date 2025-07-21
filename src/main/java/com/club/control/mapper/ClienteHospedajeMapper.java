@@ -11,6 +11,11 @@ import com.club.control.entity.MetodoPagoEntity;
 
 public class ClienteHospedajeMapper {
 
+	 // Constructor privado para evitar instanciación
+    private ClienteHospedajeMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
 	public static ClienteHospedajeEntity toEntity (ClienteHospedajeDTO dto) {
 		
 		ClienteHospedajeEntity entity = new ClienteHospedajeEntity();

@@ -9,6 +9,12 @@ import com.club.control.entity.MetodoPagoEntity;
 
 public class ClientePiscinaMapper {
 
+	 // Constructor privado para evitar instanciación
+    private ClientePiscinaMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
+	
 	public static ClientePiscinaEntity toEntity(ClientePiscinaDTO dto) {
 
 		ClientePiscinaEntity entity = new ClientePiscinaEntity();

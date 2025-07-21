@@ -16,19 +16,19 @@ public class GlobalExceptionHandler {
 	private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<?> manejarArgumentoInvalido(IllegalArgumentException ex) {
+    public ResponseEntity<Map<String, Object>> manejarArgumentoInvalido(IllegalArgumentException ex) {
         logger.warn("Error de validación: {}", ex.getMessage());
         return construirRespuesta(HttpStatus.BAD_REQUEST, ex.getMessage());
     }
 
     @ExceptionHandler(RecursosNoEncontradosException.class)
-    public ResponseEntity<?> manejarRecursoNoEncontrado(RecursosNoEncontradosException ex) {
+    public ResponseEntity<Map<String, Object>> manejarRecursoNoEncontrado(RecursosNoEncontradosException ex) {
         logger.warn("Recurso no encontrado: {}", ex.getMessage());
         return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
     }
 
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> manejarErroresGenerales(Exception ex) {
+    public ResponseEntity<Map<String, Object>> manejarErroresGenerales(Exception ex) {
         logger.error("Error interno inesperado", ex);
         return construirRespuesta(HttpStatus.INTERNAL_SERVER_ERROR, "Error interno del servidor");
     }

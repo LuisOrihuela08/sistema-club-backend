@@ -5,6 +5,11 @@ import com.club.control.entity.BungalowEntity;
 
 public class BungalowMapper {
 
+	 // Constructor privado para evitar instanciación
+    private BungalowMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
 	public static BungalowEntity toEntity (BungalowDTO dto) {
 		BungalowEntity entity = new BungalowEntity();
 		entity.setId(dto.getId());

@@ -1,5 +1,7 @@
 package com.club.control.controller;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -28,12 +30,12 @@ public class ClienteController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<?> getAllClients (){
+	public ResponseEntity<List<ClienteDTO>> getAllClients (){
 		return ResponseEntity.ok(clienteService.listClients());
 	}
 	
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPageClients(@RequestParam ("page") int page,
+	public ResponseEntity<Page<ClienteDTO>> getPageClients(@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteDTO> pageResult = clienteService.pageClients(pageable);
@@ -41,23 +43,23 @@ public class ClienteController {
 	}
 	
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getClienteById(@PathVariable Long id) {
+	public ResponseEntity<ClienteDTO> getClienteById(@PathVariable Long id) {
 		return ResponseEntity.ok(clienteService.getClientById(id));
 	}
 	
 	@GetMapping("/dni/{dni}")
-	public ResponseEntity<?> getClienteByDni(@PathVariable String dni){
+	public ResponseEntity<ClienteDTO> getClienteByDni(@PathVariable String dni){
 		return ResponseEntity.ok(clienteService.getClientByDni(dni));
 	}
 	
 	@PostMapping("/")
-	public ResponseEntity<?> createClient (@RequestBody ClienteDTO clienteDTO){
+	public ResponseEntity<ClienteDTO> createClient (@RequestBody ClienteDTO clienteDTO){
 		ClienteDTO clienteSaved = clienteService.saveClient(clienteDTO);		
 		return ResponseEntity.status(HttpStatus.CREATED).body(clienteSaved);
 	}
 	
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> updateCliente (@PathVariable Long id,
+	public ResponseEntity<ClienteDTO> updateCliente (@PathVariable Long id,
 											@RequestBody ClienteDTO dto){
 		ClienteDTO clienteUpdate = clienteService.updateClient(id, dto);
 		return ResponseEntity.ok(clienteUpdate);

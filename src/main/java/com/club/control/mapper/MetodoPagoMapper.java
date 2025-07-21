@@ -5,6 +5,11 @@ import com.club.control.entity.MetodoPagoEntity;
 
 public class MetodoPagoMapper {
 
+	 // Constructor privado para evitar instanciación
+    private MetodoPagoMapper() {
+        throw new UnsupportedOperationException("Esta es una clase utilitaria y no debe ser instanciada");
+    }
+	
 	public static MetodoPagoEntity toEntity (MetodoPagoDTO dto) {
 		MetodoPagoEntity entity = new MetodoPagoEntity();
 		entity.setId(dto.getId());

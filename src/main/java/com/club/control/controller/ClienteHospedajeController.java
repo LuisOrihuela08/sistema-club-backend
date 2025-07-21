@@ -1,6 +1,7 @@
 package com.club.control.controller;
 
 import java.time.LocalDate;
+import java.util.List;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -33,24 +34,24 @@ public class ClienteHospedajeController {
 	}
 
 	@GetMapping("/")
-	public ResponseEntity<?> findAll() {
+	public ResponseEntity<List<ClienteHospedajeDTO>> findAll() {
 		return ResponseEntity.ok(clienteHospedajeService.listAll());
 	}
 
 	@GetMapping("/id/{id}")
-	public ResponseEntity<?> getClienteHospedajeById(@PathVariable Long id) {
+	public ResponseEntity<ClienteHospedajeDTO> getClienteHospedajeById(@PathVariable Long id) {
 		return ResponseEntity.ok(clienteHospedajeService.findClienteHospedajeById(id));
 	}
 
 	@GetMapping("/pagination")
-	public ResponseEntity<?> getPagination(@RequestParam("page") int page, @RequestParam("size") int size) {
+	public ResponseEntity<Page<ClienteHospedajeDTO>> getPagination(@RequestParam("page") int page, @RequestParam("size") int size) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteHospedajeDTO> pagination = clienteHospedajeService.pageClienteHospedaje(pageable);
 		return ResponseEntity.ok(pagination);
 	}
 
 	@GetMapping("/pagination/fecha")
-	public ResponseEntity<?> getPaginationByFechaInicio(@RequestParam("page") int page, @RequestParam("size") int size,
+	public ResponseEntity<Page<ClienteHospedajeDTO>> getPaginationByFechaInicio(@RequestParam("page") int page, @RequestParam("size") int size,
 			@RequestParam("fechaInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteHospedajeDTO> result = clienteHospedajeService.pageClienteHospedajeByFechaInicio(fechaInicio,
@@ -59,7 +60,7 @@ public class ClienteHospedajeController {
 	}
 
 	@GetMapping("/pagination/fecha-between")
-	public ResponseEntity<?> getPaginationByFechaBetween(@RequestParam("page") int page, @RequestParam("size") int size,
+	public ResponseEntity<Page<ClienteHospedajeDTO>> getPaginationByFechaBetween(@RequestParam("page") int page, @RequestParam("size") int size,
 			@RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
 			@RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
 		Pageable pageable = PageRequest.of(page, size);
@@ -69,7 +70,7 @@ public class ClienteHospedajeController {
 	}
 
 	@GetMapping("/pagination/dni")
-	public ResponseEntity<?> getPaginationByClienteDni(@RequestParam("page") int page, @RequestParam("size") int size,
+	public ResponseEntity<Page<ClienteHospedajeDTO>> getPaginationByClienteDni(@RequestParam("page") int page, @RequestParam("size") int size,
 			@RequestParam("dni") String dni) {
 		Pageable pageable = PageRequest.of(page, size);
 		Page<ClienteHospedajeDTO> result = clienteHospedajeService.pageClienteHospedajeByClienteDni(dni, pageable);
@@ -77,7 +78,7 @@ public class ClienteHospedajeController {
 	}
 
 	@GetMapping("/pagination/metodoPago/fecha-between")
-	public ResponseEntity<?> getPaginationByMetodoPagoAndFechasBetween(@RequestParam("page") int page,
+	public ResponseEntity<Page<ClienteHospedajeDTO>> getPaginationByMetodoPagoAndFechasBetween(@RequestParam("page") int page,
 			@RequestParam("size") int size, @RequestParam("nameMetodoPago") String nameMetodoPago,
 			@RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
 			@RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta) {
@@ -88,13 +89,13 @@ public class ClienteHospedajeController {
 	}
 
 	@PostMapping("/")
-	public ResponseEntity<?> createClienteHospedaje(@RequestBody ClienteHospedajeDTO dto) {
+	public ResponseEntity<ClienteHospedajeDTO> createClienteHospedaje(@RequestBody ClienteHospedajeDTO dto) {
 		ClienteHospedajeDTO created = clienteHospedajeService.saveClienteHospedaje(dto);
 		return ResponseEntity.status(HttpStatus.CREATED).body(created);
 	}
 
 	@PutMapping("/id/{id}")
-	public ResponseEntity<?> updateClienteHospedaje(@RequestBody ClienteHospedajeDTO dto, @PathVariable Long id) {
+	public ResponseEntity<ClienteHospedajeDTO> updateClienteHospedaje(@RequestBody ClienteHospedajeDTO dto, @PathVariable Long id) {
 		ClienteHospedajeDTO updated = clienteHospedajeService.updateClienteHospedaje(id, dto);
 		return ResponseEntity.ok(updated);
 	}
