@@ -79,4 +79,20 @@ public class HospedajeServiceImpl implements HospedajeService{
 								  .map(HospedajeMapper::toDto);
 	}
 
+	@Override
+	public HospedajeDTO findByCodigoHabitacion(String codigoHabitacion) {
+		
+		if (codigoHabitacion == null || codigoHabitacion.isEmpty()) {
+			throw new IllegalArgumentException("El código de habitación no puede ser nulo o vacío");
+		}
+		
+		HospedajeEntity entity = hospedajeRepository.findByCodigoHabitacion(codigoHabitacion).orElseThrow(() -> {
+			throw new RecursosNoEncontradosException("Hospedaje no encontrado con el código: " + codigoHabitacion);
+		});
+		
+		logger.info("Código de habitación: {}", codigoHabitacion);
+		logger.info("Hospedaje enontrado: {}", entity);
+		return HospedajeMapper.toDto(entity);
+	}
+
 }

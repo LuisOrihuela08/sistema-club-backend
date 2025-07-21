@@ -55,8 +55,8 @@ public class ClienteBungalowGrapghQLController {
 			logger.info("Servicio de bungalow encontrado con el id: {}", result);
 			return ClienteBungalowMapper.toDto(result);
 		} catch (Exception e) {
-			logger.error("Error al encontrar el servicio de Bungalow", e);
-			throw new IllegalArgumentException("Error al obtener el bungalow con ID: " +id ,e);
+			logger.error("Se produjo un error inesperado al obtener el servicio ded bungalow con ID: "+ id, e);
+			throw new IllegalArgumentException("Error inesperado al obtener el servicio de bungalow con ID: " +id ,e);
 		}
 	}
 
@@ -78,8 +78,8 @@ public class ClienteBungalowGrapghQLController {
 			return ClienteHospedajeMapper.toDto(result);
 
 		} catch (Exception e) {
-			logger.error("Error al encontrar el servicio de Hospedaje", e);
-			throw new IllegalArgumentException("Error al obtener el hospedaje con ID: " + id , e);
+			logger.error("Se produjo un error inesperado al obtener el servicio de hospedaje con ID: "+ id, e);
+			throw new IllegalArgumentException("Error inesperado al obtener el servicio de hospedaje con ID: " + id , e);
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class ClienteBungalowGrapghQLController {
 			
 		} catch (Exception e) {
 			e.getStackTrace();
-			logger.error("Error al encontrar el servicio de Piscina", e);
+			logger.error("Se produjo un error inesperado al obtener el servicio de piscina con ID: "+ id, e);
 			throw new IllegalArgumentException ("Error al obtener el servicio de piscina con ID: " +id , e);
 		}
 	}
