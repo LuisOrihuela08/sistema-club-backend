@@ -42,7 +42,7 @@ jobs:
 
       - name: SonarQubeCloud Scan
         run: |
-          ./mvnw verify sonar:sonar \
+          ./mvnw sonar:sonar \
             -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
             -Dsonar.organization=luisorihuela08 \
             -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
