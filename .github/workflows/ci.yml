@@ -38,7 +38,7 @@ jobs:
       #  run: ./mvnw test
 
       - name: Build with Maven and build JAR
-        run: ./mvnw clean package -DskipTests
+        run: ./mvnw clean package -DskipTests=true
 
       - name: SonarQubeCloud Scan
         run: |
