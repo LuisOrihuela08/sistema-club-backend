@@ -41,7 +41,7 @@ jobs:
         run: ./mvnw clean package -DskipTests
 
       - name: Analyze with SonarCloud (via Maven)
-        run: ./mvnw verify sonar:sonar -D \
+        run: mvn verify sonar:sonar \
           -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
           -Dsonar.organization=luisorihuela08 \
           -Dsonar.host.url=https://sonarcloud.io \
