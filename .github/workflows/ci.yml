@@ -40,13 +40,9 @@ jobs:
       - name: Build with Maven and build JAR
         run: ./mvnw clean package -DskipTests
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        with:
-          args: >
-            -Dsonar.projectKey=luisorihuela08_sistema-club-backend
-            -Dsonar.organization=luisorihuela08
-            -Dsonar.host.url=https://sonarcloud.io
-            -Dsonar.java.binaries=target
-        env:
-            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      - name: Analyze with SonarCloud (via Maven)
+        run: ./mvnw verify sonar:sonar \
+          -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
+          -Dsonar.organization=luisorihuela08 \
+          -Dsonar.host.url=https://sonarcloud.io \
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
