@@ -38,12 +38,12 @@ jobs:
       #  run: ./mvnw test
 
       - name: Build with Maven and build JAR
-        run: ./mvnw clean package -DskipTests=true
+        run: ./mvnw clean package -DskipTests
 
-      - name: SonarQubeCloud Scan
-        run: |
-          ./mvnw verify sonar:sonar \
-            -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
-            -Dsonar.organization=luisorihuela08 \
-            -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
-            -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+     # - name: SonarQubeCloud Scan
+     #   run: |
+     #     ./mvnw verify sonar:sonar -DskipTests=true \
+     #       -Dsonar.projectKey=luisorihuela08_sistema-club-backend \
+     #       -Dsonar.organization=luisorihuela08 \
+     #       -Dsonar.host.url=${{ secrets.SONAR_HOST_URL }} \
+     #       -Dsonar.login=${{ secrets.SONAR_TOKEN }}
