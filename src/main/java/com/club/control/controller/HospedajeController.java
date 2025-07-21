@@ -34,6 +34,12 @@ public class HospedajeController {
 		return ResponseEntity.ok(hospedajeService.listAll());
 	}
 	
+	@GetMapping("/codigo/{codigo}")
+	public ResponseEntity<HospedajeDTO> getByCodigoHabitacion(@PathVariable String codigo){
+		HospedajeDTO hospedaje = hospedajeService.findByCodigoHabitacion(codigo);
+		return ResponseEntity.ok(hospedaje);
+	}
+	
 	@GetMapping("/pagination")
 	public ResponseEntity<Page<HospedajeDTO>> getPagination (@RequestParam ("page") int page,
 											 @RequestParam ("size") int size){
