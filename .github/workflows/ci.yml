@@ -41,7 +41,7 @@ jobs:
         uses: SonarSource/sonarcloud-github-action@v2
         with:
           args: >
-            -Dsonar.projectKey=Sistema-club-backend
+            -Dsonar.projectKey=sistema-club-backend
             -Dsonar.organization=luisorihuela08
             -Dsonar.host.url=https://sonarcloud.io
         env:
