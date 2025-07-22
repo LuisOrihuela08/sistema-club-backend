@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -39,7 +40,7 @@ public class BungalowController {
 	@GetMapping("/pagination")
 	public ResponseEntity<Page<BungalowDTO>> getPagination (@RequestParam ("page") int page,
 											@RequestParam ("size") int size){
-		Pageable pageable = PageRequest.of(page, size);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
 		Page<BungalowDTO> pagination = bungalowService.pageBungalow(pageable);
 		return ResponseEntity.ok(pagination);
 	}
