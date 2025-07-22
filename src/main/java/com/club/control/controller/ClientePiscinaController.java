@@ -49,7 +49,7 @@ public class ClientePiscinaController {
 	@GetMapping("/pagination")
 	public ResponseEntity<Page<ClientePiscinaDTO>> getPagination (@RequestParam ("page") int page,
 			 								 @RequestParam ("size") int size){
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "id"));//Esto listara de manera descendente para el id
 		Page<ClientePiscinaDTO> pagination = clientePiscinaService.pageClientsPiscina(pageable);
 		return ResponseEntity.ok(pagination);
 	}
