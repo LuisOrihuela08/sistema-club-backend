@@ -11,6 +11,7 @@ public interface HospedajeService {
 
 	List<HospedajeDTO> listAll();
 	Page<HospedajeDTO> pageHospedaje (Pageable pageable);
+	Page<HospedajeDTO> pageHospedajeByDisponible (boolean disponible, Pageable pageable);
 	HospedajeDTO findByCodigoHabitacion (String codigoHabitacion);
 	HospedajeDTO saveHospedaje (HospedajeDTO hospedajeDTO);
 	HospedajeDTO updateHospedaje (Long id, HospedajeDTO hospedajeDTO);
