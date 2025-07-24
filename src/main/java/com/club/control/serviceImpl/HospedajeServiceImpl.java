@@ -95,4 +95,17 @@ public class HospedajeServiceImpl implements HospedajeService{
 		return HospedajeMapper.toDto(entity);
 	}
 
+	@Override
+	public Page<HospedajeDTO> pageHospedajeByDisponible(boolean disponible, Pageable pageable) {
+
+		Page<HospedajeEntity> result = hospedajeRepository.findByDisponible(disponible, pageable);
+		
+		if (result.isEmpty()) {
+			throw new RecursosNoEncontradosException("No se encontro hospedajes con la disponibilidad: " + disponible);
+		}
+		
+		logger.info("Búsqueda de hospedajes por la disponibilidad OK");
+		return result.map(HospedajeMapper::toDto);
+	}
+
 }

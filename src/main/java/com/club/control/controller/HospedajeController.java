@@ -56,6 +56,15 @@ public class HospedajeController {
 		return ResponseEntity.ok(pagination);
 	}
 	
+	@GetMapping("/diponibilidad")
+	public ResponseEntity<Page<HospedajeDTO>> getHospedajeByDisponibility (@RequestParam ("page") int page,
+			 															   @RequestParam ("size") int size,
+			 															   @RequestParam ("disponible") boolean disponible){
+		Pageable pageable = PageRequest.of(page, size);
+		Page<HospedajeDTO> result = hospedajeService.pageHospedajeByDisponible(disponible, pageable);
+		return ResponseEntity.ok(result);
+	}
+	
 	@PostMapping("/")
 	public ResponseEntity<HospedajeDTO> createHospedaje (@RequestBody HospedajeDTO hospedajeDTO){
 		HospedajeDTO saved = hospedajeService.saveHospedaje(hospedajeDTO);
