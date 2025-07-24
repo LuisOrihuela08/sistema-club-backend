@@ -101,6 +101,7 @@ public class ClienteServiceImpl implements ClienteService {
 		entity.setDni(clienteDTO.getDni());
 		
 		ClienteEntity clienteSaved = clienteRepository.save(entity);
+		logger.info("Cliente actualizado: {}", clienteSaved);
 		return ClienteMapper.toDto(clienteSaved);
 	}
 

@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.club.control.dto.HospedajeDTO;
+import com.club.control.enums.TipoHabitacion;
 import com.club.control.service.HospedajeService;
 
 @RestController
@@ -39,6 +40,12 @@ public class HospedajeController {
 	public ResponseEntity<HospedajeDTO> getByCodigoHabitacion(@PathVariable String codigo){
 		HospedajeDTO hospedaje = hospedajeService.findByCodigoHabitacion(codigo);
 		return ResponseEntity.ok(hospedaje);
+	}
+	
+	//Para este caso, ya no se necesita un service debido a que llama directo al enum
+	@GetMapping("/tipos-habitacion")
+	public ResponseEntity<TipoHabitacion[]> getTipoHabitaciones(){
+		return ResponseEntity.ok(TipoHabitacion.values());
 	}
 	
 	@GetMapping("/pagination")
