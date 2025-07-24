@@ -43,7 +43,7 @@ public class HospedajeController {
 	}
 	
 	//Para este caso, ya no se necesita un service debido a que llama directo al enum
-	@GetMapping("/tipos")
+	@GetMapping("/tipos-habitacion")
 	public ResponseEntity<TipoHabitacion[]> getTipoHabitaciones(){
 		return ResponseEntity.ok(TipoHabitacion.values());
 	}
