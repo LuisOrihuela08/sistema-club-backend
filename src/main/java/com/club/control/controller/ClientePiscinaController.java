@@ -82,12 +82,12 @@ public class ClientePiscinaController {
 	
 	@GetMapping("/pagination/metodo-pago-fecha")
 	public ResponseEntity<Page<ClientePiscinaDTO>> getByPaginationMetodoPagoAndFecha (@RequestParam("metodoPago") String metodoPago,
-		    													 @RequestParam("inicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate inicio,
-		    													 @RequestParam("fin") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fin,
+		    													 @RequestParam("desde") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+		    													 @RequestParam("hasta") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta,
 		    													 @RequestParam("page") int page,
 		    													 @RequestParam("size") int size){
 		Pageable pageable = PageRequest.of(page, size);
-		Page<ClientePiscinaDTO> result = clientePiscinaService.pageClientePiscinaMetodoPagoNombreAndFecha(metodoPago, inicio, fin, pageable);
+		Page<ClientePiscinaDTO> result = clientePiscinaService.pageClientePiscinaMetodoPagoNombreAndFecha(metodoPago, desde, hasta, pageable);
 		return ResponseEntity.ok(result);
 	}
 	

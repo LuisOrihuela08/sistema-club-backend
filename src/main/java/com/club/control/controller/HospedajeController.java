@@ -56,7 +56,7 @@ public class HospedajeController {
 		return ResponseEntity.ok(pagination);
 	}
 	
-	@GetMapping("/diponibilidad")
+	@GetMapping("/disponibilidad")
 	public ResponseEntity<Page<HospedajeDTO>> getHospedajeByDisponibility (@RequestParam ("page") int page,
 			 															   @RequestParam ("size") int size,
 			 															   @RequestParam ("disponible") boolean disponible){

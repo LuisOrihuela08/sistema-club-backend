@@ -344,51 +344,63 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.add(new Paragraph("RUC: 4250125244", infoFont));
 			document.add(new Paragraph("Mz L3 Lt35 Los Alamos", infoFont));
 			document.add(new Paragraph("CHACLACAYO - LIMA", infoFont));
-			document.add(new Paragraph("Fecha: " + LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)),
+			document.add(new Paragraph("Fecha del reporte: " + LocalDate.now().format(DateTimeFormatter.ofPattern(DATE_FORMAT_PATTERN)),
 					infoFont));
 			document.add(Chunk.NEWLINE);
 
 			// Tabla con columnas personalizadas
-			PdfPTable table = new PdfPTable(6); // 6 columnas
+			PdfPTable table = new PdfPTable(8); // 8 columnas
 			table.setWidthPercentage(100);
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
-
-			PdfPCell header1 = new PdfPCell(new Phrase("C. Personas", headerFont));
+			
+			PdfPCell header1 = new PdfPCell(new Phrase("Precio Unitario", headerFont));
 			header1.setBackgroundColor(new Color(63, 169, 219));
 			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header1);
-
-			PdfPCell header2 = new PdfPCell(new Phrase("Cliente", headerFont));
+			
+			PdfPCell header2 = new PdfPCell(new Phrase("Personas", headerFont));
 			header2.setBackgroundColor(new Color(63, 169, 219));
 			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header2);
 
-			PdfPCell header3 = new PdfPCell(new Phrase("DNI", headerFont));
+			PdfPCell header3 = new PdfPCell(new Phrase("Cliente", headerFont));
 			header3.setBackgroundColor(new Color(63, 169, 219));
 			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header3);
 
-			PdfPCell header4 = new PdfPCell(new Phrase("Fecha", headerFont));
+			PdfPCell header4 = new PdfPCell(new Phrase("DNI", headerFont));
 			header4.setBackgroundColor(new Color(63, 169, 219));
 			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header4);
-
-			PdfPCell header5 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			
+			PdfPCell header5 = new PdfPCell(new Phrase("Teléfono", headerFont));
 			header5.setBackgroundColor(new Color(63, 169, 219));
 			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header5);
 
-			PdfPCell header6 = new PdfPCell(new Phrase("Total (S/)", headerFont));
+			PdfPCell header6 = new PdfPCell(new Phrase("Fecha", headerFont));
 			header6.setBackgroundColor(new Color(63, 169, 219));
 			header6.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header6);
 
+			PdfPCell header7 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			header7.setBackgroundColor(new Color(63, 169, 219));
+			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header7);
+
+			PdfPCell header8 = new PdfPCell(new Phrase("Total (S/)", headerFont));
+			header8.setBackgroundColor(new Color(63, 169, 219));
+			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header8);
+
 			// Datos
 			for (ClientePiscinaEntity entity : datos) {
+				table.addCell(String.valueOf(entity.getPrecioUnitario()));
 				table.addCell(String.valueOf(entity.getCantidadPersonas()));
 				table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
 				table.addCell(entity.getCliente().getDni());
+				table.addCell(entity.getCliente().getTelephone());
 				table.addCell(entity.getFecha().toString());
 				table.addCell(entity.getMetodo().getName());
 				table.addCell(entity.getMontoTotal().toString());
@@ -458,45 +470,57 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			document.add(Chunk.NEWLINE);
 
 			// Tabla con columnas personalizadas
-			PdfPTable table = new PdfPTable(6); // 6 columnas
+			PdfPTable table = new PdfPTable(8); // 6 columnas
 			table.setWidthPercentage(100);
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
 
-			PdfPCell header1 = new PdfPCell(new Phrase("C. Personas", headerFont));
+			PdfPCell header1 = new PdfPCell(new Phrase("Precio Unitario", headerFont));
 			header1.setBackgroundColor(new Color(63, 169, 219));
 			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header1);
-
-			PdfPCell header2 = new PdfPCell(new Phrase("Cliente", headerFont));
+			
+			PdfPCell header2 = new PdfPCell(new Phrase("C. Personas", headerFont));
 			header2.setBackgroundColor(new Color(63, 169, 219));
 			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header2);
 
-			PdfPCell header3 = new PdfPCell(new Phrase("DNI", headerFont));
+			PdfPCell header3 = new PdfPCell(new Phrase("Cliente", headerFont));
 			header3.setBackgroundColor(new Color(63, 169, 219));
 			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header3);
 
-			PdfPCell header4 = new PdfPCell(new Phrase("Fecha", headerFont));
+			PdfPCell header4 = new PdfPCell(new Phrase("DNI", headerFont));
 			header4.setBackgroundColor(new Color(63, 169, 219));
 			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header4);
-
-			PdfPCell header5 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			
+			PdfPCell header5 = new PdfPCell(new Phrase("Teléfono", headerFont));
 			header5.setBackgroundColor(new Color(63, 169, 219));
 			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header5);
 
-			PdfPCell header6 = new PdfPCell(new Phrase("Total (S/)", headerFont));
+			PdfPCell header6 = new PdfPCell(new Phrase("Fecha", headerFont));
 			header6.setBackgroundColor(new Color(63, 169, 219));
 			header6.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header6);
 
+			PdfPCell header7 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			header7.setBackgroundColor(new Color(63, 169, 219));
+			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header7);
+
+			PdfPCell header8 = new PdfPCell(new Phrase("Total (S/)", headerFont));
+			header8.setBackgroundColor(new Color(63, 169, 219));
+			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
+			table.addCell(header8);
+
 			// Datos del servicio de piscina requerido
+			table.addCell(String.valueOf(entity.getPrecioUnitario()));
 			table.addCell(String.valueOf(entity.getCantidadPersonas()));
 			table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
 			table.addCell(entity.getCliente().getDni());
+			table.addCell(entity.getCliente().getTelephone());
 			table.addCell(entity.getFecha().toString());
 			table.addCell(entity.getMetodo().getName());
 			table.addCell(entity.getMontoTotal().toString());
