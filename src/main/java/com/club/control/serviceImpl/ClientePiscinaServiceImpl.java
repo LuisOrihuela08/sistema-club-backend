@@ -322,7 +322,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			// Títulos y Encabezados
 			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
 			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
-			Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD, Color.WHITE);
+			Font headerFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.WHITE);
 
 			// Encabezado Mejorado
 			PdfPTable tableEncabezado = new PdfPTable(2);
@@ -440,7 +440,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			// Títulos y Encabezados
 			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
 			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
-			Font headerFont = new Font(Font.HELVETICA, 14, Font.BOLD, Color.WHITE);
+			Font headerFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.WHITE);
 
 			// Encabezado Mejorado
 			PdfPTable tableEncabezado = new PdfPTable(2);
@@ -480,7 +480,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header1);
 			
-			PdfPCell header2 = new PdfPCell(new Phrase("C. Personas", headerFont));
+			PdfPCell header2 = new PdfPCell(new Phrase("Personas", headerFont));
 			header2.setBackgroundColor(new Color(63, 169, 219));
 			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header2);
