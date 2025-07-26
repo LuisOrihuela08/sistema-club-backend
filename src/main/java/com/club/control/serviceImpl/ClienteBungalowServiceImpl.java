@@ -311,6 +311,7 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
 			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
 			Font headerFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.WHITE);
+			Font contentFont = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
 
 			// Encabezado Mejorado
 			PdfPTable tableEncabezado = new PdfPTable(2);
@@ -377,7 +378,7 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header7);
 			
-			PdfPCell header8 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			PdfPCell header8 = new PdfPCell(new Phrase("Método Pago", headerFont));
 			header8.setBackgroundColor(new Color(63, 169, 219));
 			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header8);
@@ -389,15 +390,15 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 
 			// Datos
 			for (ClienteBungalowEntity entity : datos) {
-				table.addCell(entity.getBungalow().getCodigo());
-				table.addCell(String.valueOf(entity.getBungalow().getPrecio()));
-				table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
-				table.addCell(entity.getCliente().getDni());
-				table.addCell(entity.getCliente().getTelephone());
-				table.addCell(entity.getFechaInicio().toString());
-				table.addCell(entity.getFechaFin().toString());
-				table.addCell(entity.getMetodoPago().getName());
-				table.addCell(entity.getMontoTotal().toString());
+				table.addCell(new PdfPCell(new Phrase(entity.getBungalow().getCodigo(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getBungalow().getPrecio()), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getDni(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getTelephone(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getFechaInicio().toString(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getFechaFin().toString(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getMetodoPago().getName(), contentFont)));
+				table.addCell(new PdfPCell(new Phrase(entity.getMontoTotal().toString(), contentFont)));
 			}
 
 			document.add(table);
@@ -450,6 +451,7 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
 			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
 			Font headerFont = new Font(Font.HELVETICA, 11, Font.BOLD, Color.WHITE);
+			Font contentFont = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
 
 			// Encabezado Mejorado
 			PdfPTable tableEncabezado = new PdfPTable(2);
@@ -516,7 +518,7 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header7);
 			
-			PdfPCell header8 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			PdfPCell header8 = new PdfPCell(new Phrase("Método Pago", headerFont));
 			header8.setBackgroundColor(new Color(63, 169, 219));
 			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header8);
@@ -527,15 +529,15 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 			table.addCell(header9);
 
 			// Datos del servicio de piscina requerido
-			table.addCell(entity.getBungalow().getCodigo());
-			table.addCell(String.valueOf(entity.getBungalow().getPrecio()));
-			table.addCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
-			table.addCell(entity.getCliente().getDni());
-			table.addCell(entity.getCliente().getTelephone());
-			table.addCell(entity.getFechaInicio().toString());
-			table.addCell(entity.getFechaFin().toString());
-			table.addCell(entity.getMetodoPago().getName());
-			table.addCell(entity.getMontoTotal().toString());
+			table.addCell(new PdfPCell(new Phrase(entity.getBungalow().getCodigo(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getBungalow().getPrecio()), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getDni(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getTelephone(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getFechaInicio().toString(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getFechaFin().toString(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getMetodoPago().getName(), contentFont)));
+			table.addCell(new PdfPCell(new Phrase(entity.getMontoTotal().toString(), contentFont)));
 
 			document.add(table);
 			document.add(Chunk.NEWLINE);
