@@ -1,8 +1,10 @@
 package com.club.control.controller;
 
+import java.util.Map;
+
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -18,8 +20,10 @@ public class ApiReniecController {
 		this.apiReniecService = apiReniecService;
 	}
 	
-	@PostMapping("/dni/{dni}")
-	public ResponseEntity<String> consulApiReniec (@PathVariable String dni){
-		return ResponseEntity.ok(apiReniecService.consultarPersonaDni(dni));
+	@GetMapping("/{dni}")
+	public ResponseEntity<Map<String, Object>> consulApiReniec (@PathVariable String dni){
+		Map<String, Object> resultado = apiReniecService.consultarPersonaDni(dni);
+		
+		return ResponseEntity.ok(resultado);
 	}
 }
