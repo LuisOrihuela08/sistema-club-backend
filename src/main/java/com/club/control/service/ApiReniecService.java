@@ -1,6 +1,6 @@
 package com.club.control.service;
 
-import java.util.HashMap;
+
 import java.util.Map;
 
 import org.slf4j.Logger;
@@ -8,11 +8,14 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 public class ApiReniecService {
@@ -32,7 +35,7 @@ public class ApiReniecService {
 	private String apiToken;
 	
 	
-	public String consultarPersonaDni (String dni) {
+	public Map<String, Object> consultarPersonaDni (String dni) {
 		
 		if (dni == null || !dni.matches("\\d{8}")) {
 			logger.error("Dni inválido: {}", dni);
@@ -41,24 +44,27 @@ public class ApiReniecService {
 		
 		try {
 			
-			//Aca construyo en cuerpo JSON requerido por la API
-			Map<String, String> requestBody = new HashMap<>();
-			requestBody.put("token", apiToken);
-			requestBody.put("type_document", "dni");
-			requestBody.put("document_number", dni);
+			String url = apiUrl + "/" + dni;
 			
-			//Encabezados
 			HttpHeaders headers = new HttpHeaders();
-			headers.setContentType(MediaType.APPLICATION_JSON);
+			headers.set("Authorization", "Bearer " + apiToken);
 			
-			//Aca construyo la solicitud
-			HttpEntity<Map<String, String>> requestEntity = new HttpEntity<>(requestBody, headers);
+			HttpEntity<Void> requestEntity = new HttpEntity<>(headers);
 			
-			//Envio la solicitud
-			ResponseEntity<String> response = restTemplate.postForEntity(apiUrl, requestEntity, String.class);
+			ResponseEntity<String> response = restTemplate.exchange(
+	                url,
+	                HttpMethod.GET,
+	                requestEntity,
+	                String.class
+	            );
 			
 			logger.info("Consulta exitosa con el dni: {}", dni);
-			return response.getBody();
+			
+			 // Convertir el JSON en un Map
+            ObjectMapper objectMapper = new ObjectMapper();
+            Map<String, Object> jsonMap = objectMapper.readValue(response.getBody(), new TypeReference<>() {});
+
+            return jsonMap;
 			
 		} catch (HttpClientErrorException e) {
             logger.error("Error HTTP al consultar DNI {}: {}", dni, e.getResponseBodyAsString());
