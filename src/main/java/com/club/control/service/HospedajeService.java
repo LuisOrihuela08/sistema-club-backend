@@ -10,6 +10,7 @@ import com.club.control.dto.HospedajeDTO;
 public interface HospedajeService {
 
 	List<HospedajeDTO> listAll();
+	List<HospedajeDTO> findByDisponibles(boolean disponible);
 	Page<HospedajeDTO> pageHospedaje (Pageable pageable);
 	Page<HospedajeDTO> pageHospedajeByDisponible (boolean disponible, Pageable pageable);
 	HospedajeDTO findByCodigoHabitacion (String codigoHabitacion);

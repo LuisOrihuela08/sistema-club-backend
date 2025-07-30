@@ -56,6 +56,12 @@ public class HospedajeController {
 		return ResponseEntity.ok(pagination);
 	}
 	
+	@GetMapping("/disponibles")
+	public ResponseEntity<List<HospedajeDTO>> getHospedajeDisponibles(){
+		List<HospedajeDTO> disponibles = hospedajeService.findByDisponibles(true);
+		return ResponseEntity.ok(disponibles);
+	}
+	
 	@GetMapping("/disponibilidad")
 	public ResponseEntity<Page<HospedajeDTO>> getHospedajeByDisponibility (@RequestParam ("page") int page,
 			 															   @RequestParam ("size") int size,

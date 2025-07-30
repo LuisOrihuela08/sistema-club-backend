@@ -154,7 +154,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 		BigDecimal montoTotal = BigDecimal.valueOf(clientePiscinaDTO.getPrecioUnitario())
 				.multiply(BigDecimal.valueOf(clientePiscinaDTO.getCantidadPersonas()));
 		entity.setMontoTotal(montoTotal);
-		entity.setFecha(clientePiscinaDTO.getFecha());
+		entity.setFecha(entity.getFecha());
 		entity.setCliente(cliente);
 		entity.setMetodo(metodo);
 

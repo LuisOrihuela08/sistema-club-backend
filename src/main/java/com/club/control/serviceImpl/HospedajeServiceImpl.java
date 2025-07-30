@@ -108,4 +108,9 @@ public class HospedajeServiceImpl implements HospedajeService{
 		return result.map(HospedajeMapper::toDto);
 	}
 
+	@Override
+	public List<HospedajeDTO> findByDisponibles(boolean disponible) {
+		return hospedajeRepository.findByDisponible(true).stream().map(HospedajeMapper::toDto).toList();
+	}
+
 }
