@@ -1,5 +1,6 @@
 package com.club.control.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,7 @@ public interface BungalowRepository extends JpaRepository<BungalowEntity, Long>{
 	
 	//Filtro para buscar los bungalows disponibles
 	Page<BungalowEntity> findByDisponible(boolean disponible, Pageable pageable);
+	
+	//Esto es para listar solo los bungalows disponibles = true
+	List<BungalowEntity> findByDisponible(boolean disponible);
 }

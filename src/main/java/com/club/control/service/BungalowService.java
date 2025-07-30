@@ -10,6 +10,7 @@ import com.club.control.dto.BungalowDTO;
 public interface BungalowService {
 
 	List<BungalowDTO> findAll();
+	List<BungalowDTO> findByDisponible(boolean disponible);
 	Page<BungalowDTO> pageBungalow (Pageable pageable);
 	BungalowDTO saveBungalow (BungalowDTO bungalowDTO);
 	BungalowDTO updateBungalow (Long id, BungalowDTO bungalowDTO);

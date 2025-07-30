@@ -50,8 +50,14 @@ public class BungalowController {
 		return ResponseEntity.ok(bungalowService.findBungalowByCodigo(codigo));
 	}
 	
+	@GetMapping("/disponibles")
+	public ResponseEntity<List<BungalowDTO>> getBungalowsDisponibles(){
+		List<BungalowDTO> disponibles = bungalowService.findByDisponible(true);
+		return ResponseEntity.ok(disponibles);
+	}
+	
 	@GetMapping("/disponibilidad")
-	public ResponseEntity<Page<BungalowDTO>> getBungalowsDisponibles (@RequestParam ("page") int page,
+	public ResponseEntity<Page<BungalowDTO>> getBungalowsByDisponibilidad (@RequestParam ("page") int page,
 													  @RequestParam ("size") int size,
 													  @RequestParam ("disponible") boolean disponible){
 		Pageable pageable = PageRequest.of(page, size);

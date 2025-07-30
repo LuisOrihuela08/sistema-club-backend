@@ -1,5 +1,6 @@
 package com.club.control.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.domain.Page;
@@ -14,4 +15,7 @@ public interface HospedajeRepository extends JpaRepository<HospedajeEntity, Long
 	
 	//Esto es para filtrar los hospedajes por disponibilidad
 	Page<HospedajeEntity> findByDisponible (boolean disponible, Pageable pageable);
+	
+	//Para obtener las habitaciones de hospedajes solo disponibles
+	List<HospedajeEntity> findByDisponible(boolean disponible);
 }

@@ -124,4 +124,12 @@ public class BungalowServiceImpl implements BungalowService{
 		return entities.map(BungalowMapper::toDto);
 	}
 
+	//Esto es para listar los bungalow que solo estan disponibles para asignarlos a un servicio
+	@Override
+	public List<BungalowDTO> findByDisponible(boolean disponible) {
+		return bungalowRepository.findByDisponible(true).stream()
+														.map(BungalowMapper::toDto)
+														.toList();
+	}
+
 }
