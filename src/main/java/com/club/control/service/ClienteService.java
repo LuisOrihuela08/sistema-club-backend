@@ -16,4 +16,7 @@ public interface ClienteService {
 	List<ClienteDTO> listClients();
 	Page<ClienteDTO> pageClients(Pageable pageable);
 	
+	//Esto es para exportar la lista de clientes en excel
+	byte [] exportExcelClientes ();
+	
 }

@@ -1,7 +1,11 @@
 package com.club.control.serviceimpl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -10,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import com.club.control.dto.ClienteDTO;
 import com.club.control.entity.ClienteEntity;
+import com.club.control.error.ExportarExcelException;
 import com.club.control.error.RecursosNoEncontradosException;
 import com.club.control.mapper.ClienteMapper;
 import com.club.control.repository.ClienteRepository;
@@ -116,5 +121,59 @@ public class ClienteServiceImpl implements ClienteService {
 		logger.info("Listado de paginación de clientes OK !");
 		return clienteRepository.findAll(pageable)
 								.map(ClienteMapper::toDto);
+	}
+
+	@Override
+	public byte[] exportExcelClientes(){
+		
+		try {
+			
+			List<ClienteEntity> clientes = clienteRepository.findAll();
+			
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("Lista de Clientes");
+			
+			Row headerRow = sheet.createRow(0);
+			String [] columnas = {"Nombres", "Apellidos", "DNI", "Teléfono", "Distrito"};
+			
+
+			for (int i = 0; i < columnas.length; i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(columnas[i]);
+				cell.setCellStyle(crearEstiloEncabezado(workbook));
+			}
+			
+			int rowNum = 1;
+			for(ClienteEntity clienteEntity: clientes) {
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(clienteEntity.getName());
+				row.createCell(1).setCellValue(clienteEntity.getLastName());
+				row.createCell(2).setCellValue(clienteEntity.getDni());
+				row.createCell(3).setCellValue(clienteEntity.getTelephone());
+				row.createCell(4).setCellValue(clienteEntity.getDistrict());
+			}
+			
+			for (int i = 0; i < columnas.length; i++) {
+				sheet.autoSizeColumn(i);
+			}
+			
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			logger.info("Excel de clientes generado correctamente");
+			return outputStream.toByteArray();
+			
+		} catch (IOException e) {
+			logger.error("Hubo un error al generar el excel con la lista de clientes");
+			throw new ExportarExcelException("No se pudo exportar la lista de clientes en excel", e);
+		}	
+	}
+	
+	private CellStyle crearEstiloEncabezado(Workbook workbook) {
+		CellStyle estilo = workbook.createCellStyle();
+		Font font = workbook.createFont();
+		font.setBold(true);
+		estilo.setFont(font);
+		return estilo;
 	}
 }
