@@ -26,6 +26,12 @@ public class GlobalExceptionHandler {
         logger.warn("Recurso no encontrado: {}", ex.getMessage());
         return construirRespuesta(HttpStatus.NOT_FOUND, ex.getMessage());
     }
+    
+    @ExceptionHandler(ExportarExcelException.class)
+    public ResponseEntity<Map<String, Object>> manejarErrorExportarExcel(ExportarExcelException ex) {
+        logger.error("Error al exportar Excel: {}", ex.getMessage());
+        return construirRespuesta(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+    }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> manejarErroresGenerales(Exception ex) {
