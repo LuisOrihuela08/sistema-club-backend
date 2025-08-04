@@ -26,4 +26,7 @@ public interface ClientePiscinaService {
 
 	//Para generar PDF por servicio piscina
 	byte[] exportarPdfClientePiscinaById (Long id);
+	
+	//Esto es para generar el reporte en Excel
+	byte[] exportarExcelFiltradoClientePiscina(String dni, String nombreMetodoPago, LocalDate fecha, LocalDate desde, LocalDate hasta);
 }

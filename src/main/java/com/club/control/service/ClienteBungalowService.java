@@ -26,4 +26,7 @@ public interface ClienteBungalowService {
 
 	 //Esto es para generar PDF por servicios de bungalow
 	 byte[] exportarPdfClienteBungalowById (Long id);
+	 
+	//Esto es para generar Excel por filtros
+	 byte[] exportarExcelFiltrado(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde, LocalDate hasta);
 }

@@ -26,4 +26,7 @@ public interface ClienteHospedajeService {
 	 
 	 //Esto es para generar PDF por cada servicio de hospedaje
 	 byte[] exportarPdfClienteHospedajeById (Long id);
+	 
+	//Esto es para generar Excel por filtros
+	byte[] exportarExcelFiltradoClienteHospedaje(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde, LocalDate hasta);
 }

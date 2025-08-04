@@ -2,11 +2,14 @@ package com.club.control.serviceimpl;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -17,6 +20,7 @@ import com.club.control.dto.ClientePiscinaDTO;
 import com.club.control.entity.ClienteEntity;
 import com.club.control.entity.ClientePiscinaEntity;
 import com.club.control.entity.MetodoPagoEntity;
+import com.club.control.error.ExportarExcelException;
 import com.club.control.error.RecursosNoEncontradosException;
 import com.club.control.mapper.ClientePiscinaMapper;
 import com.club.control.repository.ClientePiscinaRepository;
@@ -295,7 +299,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 		return generarPdf(datos);
 	}
 
-	// Esto es para generar PDF segun los filtros
+	// Esto es para generar PDF y Excel segun los filtros
 	public List<ClientePiscinaEntity> obtenerDatosFiltradosSinPaginacion(String dni, String metodoPago, LocalDate fecha,
 			LocalDate desde, LocalDate hasta) {
 		if (dni != null && !dni.isEmpty()) {
@@ -538,5 +542,70 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 
 		logger.info("PDF generado Exitosamente del servicio de piscina con el id: {}", id);
 		return baos.toByteArray();
+	}
+
+	@Override
+	public byte[] exportarExcelFiltradoClientePiscina(String dni, String nombreMetodoPago, LocalDate fecha, LocalDate desde,
+			LocalDate hasta) {
+		
+		List<ClientePiscinaEntity> datos = obtenerDatosFiltradosSinPaginacion(dni, nombreMetodoPago, fecha, desde, hasta);
+		
+		return generarExcel(datos);
+	}
+	
+	private byte[] generarExcel(List<ClientePiscinaEntity> datos) {
+		
+		try {
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("Lista de Servicio de Piscina");
+			
+			Row headerRow = sheet.createRow(0);
+			String [] columnas = {"Precio Unitario", "Personas", "Cliente", "DNI", "Teléfono", "Fecha", "Método de Pago", "Monto Total"};
+			
+
+			for (int i = 0; i < columnas.length; i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(columnas[i]);
+				cell.setCellStyle(crearEstiloEncabezado(workbook));
+			}
+			
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			
+			int rowNum = 1;
+			for(ClientePiscinaEntity entity: datos) {
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(entity.getPrecioUnitario());
+				row.createCell(1).setCellValue(entity.getCantidadPersonas());
+				row.createCell(2).setCellValue(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
+				row.createCell(3).setCellValue(entity.getCliente().getDni());
+				row.createCell(4).setCellValue(entity.getCliente().getTelephone());
+				row.createCell(5).setCellValue(entity.getFecha().format(formatter));
+				row.createCell(6).setCellValue(entity.getMetodo().getName());
+				row.createCell(7).setCellValue(String.valueOf(entity.getMontoTotal()));
+			}
+			
+			for (int i = 0; i < columnas.length; i++) {
+				sheet.autoSizeColumn(i);
+			}
+			
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			logger.info("Excel de servicio de piscina generado exitosamente");
+			return outputStream.toByteArray();
+			
+		} catch (IOException e) {
+			logger.error("Hubo un error al generar el excel filtrado de servicios de piscinas");
+			throw new ExportarExcelException("No se pudo exportar el excel de servicios de piscina", e);
+		}
+	}
+	
+	private CellStyle crearEstiloEncabezado(Workbook workbook) {
+		CellStyle estilo = workbook.createCellStyle();
+		org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+		font.setBold(true);
+		estilo.setFont(font);
+		return estilo;
 	}
 }

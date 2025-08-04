@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -138,5 +139,21 @@ public class ClientePiscinaController {
 	    headers.setContentDispositionFormData("attachment", "reporte.pdf");
 	    
 	    return ResponseEntity.ok().headers(headers).body(pdf);
+	}
+	
+	@GetMapping("/exportar-excel")
+	public ResponseEntity<byte[]> exportarExcel(
+			@RequestParam(required = false) String dni,
+		    @RequestParam(required = false) String metodoPago,
+		    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate fechaInicio,
+		    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate desde,
+		    @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate hasta
+			){
+		byte[] excel = clientePiscinaService.exportarExcelFiltradoClientePiscina(dni, metodoPago, fechaInicio, desde, hasta);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.parseMediaType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"));
+		headers.setContentDisposition(ContentDisposition.attachment().filename("servicio-piscina.xlsx").build());
+		return ResponseEntity.ok().headers(headers).body(excel);
 	}
 }
