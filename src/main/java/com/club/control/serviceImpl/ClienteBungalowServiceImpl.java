@@ -2,11 +2,18 @@ package com.club.control.serviceimpl;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +25,7 @@ import com.club.control.entity.BungalowEntity;
 import com.club.control.entity.ClienteBungalowEntity;
 import com.club.control.entity.ClienteEntity;
 import com.club.control.entity.MetodoPagoEntity;
+import com.club.control.error.ExportarExcelException;
 import com.club.control.error.RecursosNoEncontradosException;
 import com.club.control.mapper.ClienteBungalowMapper;
 import com.club.control.repository.BungalowRepository;
@@ -283,7 +291,7 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 		return generarPdf(datos);
 	}
 
-	// Esto es para generar PDF segun los filtros
+	// Esto es para generar PDF y Excel segun los filtros
 	public List<ClienteBungalowEntity> obtenerDatosFiltradosSinPaginacion(String dni, String metodoPago,
 			LocalDate fechaInicio, LocalDate desde, LocalDate hasta) {
 		if (dni != null && !dni.isEmpty()) {
@@ -549,6 +557,71 @@ public class ClienteBungalowServiceImpl implements ClienteBungalowService {
 		}
 		logger.info("PDF generado Exitosamente del servicio de bungalow con el id: {}", id);
 		return baos.toByteArray();
+	}
+
+	@Override
+	public byte[] exportarExcelFiltrado(String dni, String metodoPago, LocalDate fechaInicio, LocalDate desde,
+			LocalDate hasta) {
+		List<ClienteBungalowEntity> datos = obtenerDatosFiltradosSinPaginacion(dni, metodoPago, fechaInicio, desde, hasta);
+						
+		return generarExcel(datos);
+	}
+	
+	private byte[] generarExcel(List<ClienteBungalowEntity> datos) {
+		
+		try {
+			
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("Lista de Servicio de Bungalows");
+			
+			Row headerRow = sheet.createRow(0);
+			String [] columnas = {"Bungalow", "Precio", "Cliente", "DNI", "Teléfono", "Fecha Ingreso", "Fecha Salida", "Método de pago", "Total"};
+			
+
+			for (int i = 0; i < columnas.length; i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(columnas[i]);
+				cell.setCellStyle(crearEstiloEncabezado(workbook));
+			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			
+			int rowNum = 1;
+			for(ClienteBungalowEntity entity: datos) {
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(entity.getBungalow().getCodigo());
+				row.createCell(1).setCellValue(entity.getBungalow().getPrecio());
+				row.createCell(2).setCellValue(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
+				row.createCell(3).setCellValue(entity.getCliente().getDni());
+				row.createCell(4).setCellValue(entity.getCliente().getTelephone());
+				row.createCell(5).setCellValue(entity.getFechaInicio().format(formatter));
+				row.createCell(6).setCellValue(entity.getFechaFin().format(formatter));
+				row.createCell(7).setCellValue(entity.getMetodoPago().getName());
+				row.createCell(8).setCellValue(String.valueOf(entity.getMontoTotal()));
+			}
+			
+			for (int i = 0; i < columnas.length; i++) {
+				sheet.autoSizeColumn(i);
+			}
+			
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			logger.info("Excel de servicio de bungalows generado exitosamente" );
+			return outputStream.toByteArray();
+			
+		} catch (IOException e) {
+			logger.error("Hubo un error al generar el excel de servicio de bungalows");
+			throw new ExportarExcelException("No se pudo exportar el excel de servicio de bungalows", e);
+		}
+	}
+	
+	private CellStyle crearEstiloEncabezado(Workbook workbook) {
+		CellStyle estilo = workbook.createCellStyle();
+		org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+		font.setBold(true);
+		estilo.setFont(font);
+		return estilo;
 	}
 
 }

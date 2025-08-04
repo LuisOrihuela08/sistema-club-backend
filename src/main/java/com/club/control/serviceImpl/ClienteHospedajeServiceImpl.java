@@ -2,11 +2,18 @@ package com.club.control.serviceimpl;
 
 import java.awt.Color;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellStyle;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -18,6 +25,7 @@ import com.club.control.entity.ClienteEntity;
 import com.club.control.entity.ClienteHospedajeEntity;
 import com.club.control.entity.HospedajeEntity;
 import com.club.control.entity.MetodoPagoEntity;
+import com.club.control.error.ExportarExcelException;
 import com.club.control.error.RecursosNoEncontradosException;
 import com.club.control.mapper.ClienteHospedajeMapper;
 import com.club.control.repository.ClienteHospedajeRepository;
@@ -365,7 +373,7 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService {
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
 
-			PdfPCell header1 = new PdfPCell(new Phrase("Cuarto", headerFont));
+			PdfPCell header1 = new PdfPCell(new Phrase("Habitación", headerFont));
 			header1.setBackgroundColor(new Color(63, 169, 219));
 			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header1);
@@ -492,7 +500,7 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService {
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
 
-			PdfPCell header1 = new PdfPCell(new Phrase("Cuarto", headerFont));
+			PdfPCell header1 = new PdfPCell(new Phrase("Habitación", headerFont));
 			header1.setBackgroundColor(new Color(63, 169, 219));
 			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header1);
@@ -527,7 +535,7 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService {
 			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header7);
 
-			PdfPCell header8 = new PdfPCell(new Phrase("M.Pago", headerFont));
+			PdfPCell header8 = new PdfPCell(new Phrase("Método Pago", headerFont));
 			header8.setBackgroundColor(new Color(63, 169, 219));
 			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
 			table.addCell(header8);
@@ -559,6 +567,70 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService {
 		}
 		logger.info("PDF generado Exitosamente del servicio de hospedaje con el id: {}", id);
 		return baos.toByteArray();
+	}
+
+	@Override
+	public byte[] exportarExcelFiltradoClienteHospedaje(String dni, String metodoPago, LocalDate fechaInicio,
+			LocalDate desde, LocalDate hasta) {
+		List<ClienteHospedajeEntity> datos = obtenerDatosFiltradosSinPaginacion(dni, metodoPago, fechaInicio, desde, hasta);
+		
+		return generarExcel(datos);
+	}
+	
+	private byte[] generarExcel(List<ClienteHospedajeEntity> datos) {
+		
+		try {
+			
+			Workbook workbook = new XSSFWorkbook();
+			Sheet sheet = workbook.createSheet("Lista de Servicio de Hospedaje");
+			
+			Row headerRow = sheet.createRow(0);
+			String [] columnas = {"Habitación", "Precio", "Cliente", "DNI", "Teléfono", "Fecha Ingreso", "Fecha Salida", "Método de pago", "Total"};
+			
+
+			for (int i = 0; i < columnas.length; i++) {
+				Cell cell = headerRow.createCell(i);
+				cell.setCellValue(columnas[i]);
+				cell.setCellStyle(crearEstiloEncabezado(workbook));
+			}
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+			int rowNum = 1;
+			for(ClienteHospedajeEntity entity: datos) {
+				Row row = sheet.createRow(rowNum++);
+				row.createCell(0).setCellValue(entity.getHospedaje().getCodigoHabitacion());
+				row.createCell(1).setCellValue(entity.getHospedaje().getPrecio());
+				row.createCell(2).setCellValue(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
+				row.createCell(3).setCellValue(entity.getCliente().getDni());
+				row.createCell(4).setCellValue(entity.getCliente().getTelephone());
+				row.createCell(5).setCellValue(entity.getFechaInicio().format(formatter));
+				row.createCell(6).setCellValue(entity.getFechaFin().format(formatter));
+				row.createCell(7).setCellValue(entity.getMetodoPago().getName());
+				row.createCell(8).setCellValue(String.valueOf(entity.getMontoTotal()));			
+			}
+			
+			for (int i = 0; i < columnas.length; i++) {
+				sheet.autoSizeColumn(i);
+			}
+			
+			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			workbook.write(outputStream);
+			workbook.close();
+			
+			logger.info("Excel de servicio de hospedaje se genero exitosamente");
+			return outputStream.toByteArray();
+			
+		} catch (IOException e) {
+			logger.error("Hubo un error al generar el excel de servicio de hospedaje");
+			throw new ExportarExcelException("No se pudo generar el excel de servicios de hospedaje", e);
+		}
+	}
+	
+	private CellStyle crearEstiloEncabezado(Workbook workbook) {
+		CellStyle estilo = workbook.createCellStyle();
+		org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+		font.setBold(true);
+		estilo.setFont(font);
+		return estilo;
 	}
 
 }

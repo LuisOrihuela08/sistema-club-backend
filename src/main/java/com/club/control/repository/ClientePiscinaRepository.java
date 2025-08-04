@@ -28,5 +28,7 @@ public interface ClientePiscinaRepository extends JpaRepository<ClientePiscinaEn
 	List<ClientePiscinaEntity> findByFechaBetween (LocalDate desde, LocalDate hasta);
 	List<ClientePiscinaEntity> findByClienteDni (String dni);
 	List<ClientePiscinaEntity> findByMetodoNameAndFechaBetween (String name, LocalDate desde, LocalDate hasta);
+	
+	
 
 }
