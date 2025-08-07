@@ -340,7 +340,7 @@ public class ClienteHospedajeServiceImpl implements ClienteHospedajeService {
 			// Títulos y Encabezados
 			Font titleFont = new Font(Font.HELVETICA, 20, Font.BOLD, Color.WHITE);
 			Font infoFont = new Font(Font.HELVETICA, 12, Font.NORMAL, Color.DARK_GRAY);
-			Font headerFont = new Font(Font.HELVETICA, 12, Font.BOLD, Color.WHITE);
+			Font headerFont = new Font(Font.HELVETICA, 10, Font.BOLD, Color.WHITE);
 			Font contentFont = new Font(Font.HELVETICA, 10, Font.NORMAL, Color.BLACK);
 
 			// Encabezado Mejorado

@@ -30,10 +30,49 @@ api:
   reniec:
     url: ${API_URL}
     token: ${API_TOKEN}
-    
----
+
+frontend:
+  url: http://localhost:4200
+
 server:
   forward-headers-strategy: framework  # Habilita detección de protocolo HTTPS en producción    
+           
+springdoc:     
+  swagger-ui:
+    path: /swagger-ui-custom.html 
+    
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: optional:file:.env[.properties]
+              
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=${SQLSERVER_DATABASE};encrypt=false
+    username: ${SQLSERVER_USER}
+    password: ${SQLSERVER_PASSWORD}
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+  jpa:
+    database-platform: org.hibernate.dialect.SQLServerDialect
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+api:
+  reniec:
+    url: ${API_URL}
+    token: ${API_TOKEN}
+
+frontend:
+  url: ${FRONTEND_URL}
+    
+server:
+  forward-headers-strategy: framework  # Habilita detección de protocolo HTTPS en producción    
+
            
 springdoc:     
   swagger-ui:
