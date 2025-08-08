@@ -68,6 +68,7 @@ La API cuenta con documentación generada automáticamente con Swagger. Puedes a
 - Spring Boot
 - Apache POI
 - OpenPDF
+- GraphQL
 - Swagger
 - Docker
 - SQL Server
