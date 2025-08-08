@@ -49,7 +49,7 @@ spring:
     import: optional:file:.env[.properties]
               
   datasource:
-    url: jdbc:sqlserver://localhost:1433;databaseName=${SQLSERVER_DATABASE};encrypt=false
+    url: jdbc:sqlserver://${SQLSERVER_URL}:1433;databaseName=${SQLSERVER_DATABASE};encrypt=false
     username: ${SQLSERVER_USER}
     password: ${SQLSERVER_PASSWORD}
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
