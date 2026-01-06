@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.util.List;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,157 +25,215 @@ import com.club.control.service.ClienteService;
 @Service
 public class ClienteServiceImpl implements ClienteService {
 
-	private static Logger logger = LoggerFactory.getLogger(ClienteServiceImpl.class);
+    private static Logger logger = LoggerFactory.getLogger(ClienteServiceImpl.class);
 
-	private final ClienteRepository clienteRepository;
+    private final ClienteRepository clienteRepository;
 
-	public ClienteServiceImpl(ClienteRepository clienteRepository) {
-		this.clienteRepository = clienteRepository;
-	}
+    public ClienteServiceImpl(ClienteRepository clienteRepository) {
+        this.clienteRepository = clienteRepository;
+    }
 
-	@Override
-	public ClienteDTO saveClient(ClienteDTO clienteDTO) {
+    @Override
+    public ClienteDTO saveClient(ClienteDTO clienteDTO) {
 
-		if (clienteDTO == null) {
-			throw new IllegalArgumentException("El cliente no puede ser nulo");
-		}
+        if (clienteDTO == null) {
+            throw new IllegalArgumentException("El cliente no puede ser nulo");
+        }
 
-		ClienteEntity entity = ClienteMapper.toEntity(clienteDTO);
-		ClienteEntity clientSave = clienteRepository.save(entity);
-		logger.info("Cliente agregado: {}", clientSave);
-		return ClienteMapper.toDto(clientSave);
-	}
+        ClienteEntity entity = ClienteMapper.toEntity(clienteDTO);
+        ClienteEntity clientSave = clienteRepository.save(entity);
+        logger.info("Cliente agregado: {}", clientSave);
+        return ClienteMapper.toDto(clientSave);
+    }
 
-	@Override
-	public ClienteDTO getClientById(Long id) {
+    @Override
+    public ClienteDTO getClientById(Long id) {
 
-		if (id == null) {
-			throw new IllegalArgumentException("El id no puede ser nulo");
-		} else if (id <= 0) {
-			throw new IllegalArgumentException("El id no puede ser menor ó igual a 0");
-		}
+        if (id == null) {
+            throw new IllegalArgumentException("El id no puede ser nulo");
+        } else if (id <= 0) {
+            throw new IllegalArgumentException("El id no puede ser menor ó igual a 0");
+        }
 
-		ClienteEntity entity = clienteRepository.findById(id).orElseThrow(() -> {
-			return new RecursosNoEncontradosException("No se encontró cliente con el ID: " + id);
-		});
+        ClienteEntity entity = clienteRepository.findById(id).orElseThrow(() -> {
+            return new RecursosNoEncontradosException("No se encontró cliente con el ID: " + id);
+        });
 
-		logger.info("Cliente encontrado: {}", id);
-		return ClienteMapper.toDto(entity);
-	}
+        logger.info("Cliente encontrado: {}", id);
+        return ClienteMapper.toDto(entity);
+    }
 
-	@Override
-	public ClienteDTO getClientByDni(String dni) {
+    @Override
+    public ClienteDTO getClientByDni(String dni) {
 
-		if (dni == null || dni.isBlank()) {
-			throw new IllegalArgumentException("El dni no puede ser nulo o vacío");
-		} else if (!dni.matches("\\d{8}")) {
-			throw new IllegalArgumentException("El dni debe tener 8 dígitos");
-		}
+        if (dni == null || dni.isBlank()) {
+            throw new IllegalArgumentException("El dni no puede ser nulo o vacío");
+        } else if (!dni.matches("\\d{8}")) {
+            throw new IllegalArgumentException("El dni debe tener 8 dígitos");
+        }
 
-		ClienteEntity entity = clienteRepository.findByDni(dni).orElseThrow(() -> {
-			throw new RecursosNoEncontradosException("No se encontró al cliente con el dni: " + dni);
-		});
+        ClienteEntity entity = clienteRepository.findByDni(dni).orElseThrow(() -> {
+            throw new RecursosNoEncontradosException("No se encontró al cliente con el dni: " + dni);
+        });
 
-		logger.info("DNI ingresado: {}, Cliente encontrado: {}", dni, entity);
-		return ClienteMapper.toDto(entity);
-	}
+        logger.info("DNI ingresado: {}, Cliente encontrado: {}", dni, entity);
+        return ClienteMapper.toDto(entity);
+    }
 
-	@Override
-	public List<ClienteDTO> listClients() {
-		
-		List<ClienteEntity> clientes = clienteRepository.findAll();
-		logger.info("Listado de clientes OK");
-		return clientes.stream().map(ClienteMapper::toDto).toList();
-	}
+    @Override
+    public List<ClienteDTO> listClients() {
 
-	@Override
-	public ClienteDTO updateClient(Long id, ClienteDTO clienteDTO) {
-		
-		if (id == null) {
-			throw new IllegalArgumentException("El id no puede ser nulo");
-		} else if (id <= 0) {
-			throw new IllegalArgumentException("El id no puede ser igual o menor a 0");
-		}
-		
-		ClienteEntity entity = clienteRepository.findById(id).orElseThrow(() -> {
-			throw new RecursosNoEncontradosException("No se encontro el cliente con el id: " + id);
-		});
-		
-		entity.setName(clienteDTO.getName());
-		entity.setLastName(clienteDTO.getLastName());
-		entity.setTelephone(clienteDTO.getTelephone());
-		entity.setDistrict(clienteDTO.getDistrict());
-		entity.setDni(clienteDTO.getDni());
-		
-		ClienteEntity clienteSaved = clienteRepository.save(entity);
-		logger.info("Cliente actualizado: {}", clienteSaved);
-		return ClienteMapper.toDto(clienteSaved);
-	}
+        List<ClienteEntity> clientes = clienteRepository.findAll();
+        logger.info("Listado de clientes OK");
+        return clientes.stream().map(ClienteMapper::toDto).toList();
+    }
 
-	@Override
-	public Page<ClienteDTO> pageClients(Pageable pageable) {
-		
-		if (pageable.getPageSize() <= 0 )  {
-			throw new IllegalArgumentException("El tamaño no puede ser menor/igual a 0");
-		} else if (pageable.getPageNumber() < 0) {
-			throw new IllegalArgumentException("La página no puede ser menor a 0");
-		}
-		logger.info("Listado de paginación de clientes OK !");
-		return clienteRepository.findAll(pageable)
-								.map(ClienteMapper::toDto);
-	}
+    @Override
+    public ClienteDTO updateClient(Long id, ClienteDTO clienteDTO) {
 
-	@Override
-	public byte[] exportExcelClientes(){
-		
-		try {
-			
-			List<ClienteEntity> clientes = clienteRepository.findAll();
-			
-			Workbook workbook = new XSSFWorkbook();
-			Sheet sheet = workbook.createSheet("Lista de Clientes");
-			
-			Row headerRow = sheet.createRow(0);
-			String [] columnas = {"Nombres", "Apellidos", "DNI", "Teléfono", "Distrito"};
-			
+        if (id == null) {
+            throw new IllegalArgumentException("El id no puede ser nulo");
+        } else if (id <= 0) {
+            throw new IllegalArgumentException("El id no puede ser igual o menor a 0");
+        }
 
-			for (int i = 0; i < columnas.length; i++) {
-				Cell cell = headerRow.createCell(i);
-				cell.setCellValue(columnas[i]);
-				cell.setCellStyle(crearEstiloEncabezado(workbook));
-			}
-			
-			int rowNum = 1;
-			for(ClienteEntity clienteEntity: clientes) {
-				Row row = sheet.createRow(rowNum++);
-				row.createCell(0).setCellValue(clienteEntity.getName());
-				row.createCell(1).setCellValue(clienteEntity.getLastName());
-				row.createCell(2).setCellValue(clienteEntity.getDni());
-				row.createCell(3).setCellValue(clienteEntity.getTelephone());
-				row.createCell(4).setCellValue(clienteEntity.getDistrict());
-			}
-			
-			for (int i = 0; i < columnas.length; i++) {
-				sheet.autoSizeColumn(i);
-			}
-			
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			workbook.write(outputStream);
-			workbook.close();
-			logger.info("Excel de clientes generado correctamente");
-			return outputStream.toByteArray();
-			
-		} catch (IOException e) {
-			logger.error("Hubo un error al generar el excel con la lista de clientes");
-			throw new ExportarExcelException("No se pudo exportar la lista de clientes en excel", e);
-		}	
-	}
-	
-	private CellStyle crearEstiloEncabezado(Workbook workbook) {
-		CellStyle estilo = workbook.createCellStyle();
-		Font font = workbook.createFont();
-		font.setBold(true);
-		estilo.setFont(font);
-		return estilo;
-	}
+        ClienteEntity entity = clienteRepository.findById(id).orElseThrow(() -> {
+            throw new RecursosNoEncontradosException("No se encontro el cliente con el id: " + id);
+        });
+
+        entity.setName(clienteDTO.getName());
+        entity.setLastName(clienteDTO.getLastName());
+        entity.setTelephone(clienteDTO.getTelephone());
+        entity.setDistrict(clienteDTO.getDistrict());
+        entity.setDni(clienteDTO.getDni());
+
+        ClienteEntity clienteSaved = clienteRepository.save(entity);
+        logger.info("Cliente actualizado: {}", clienteSaved);
+        return ClienteMapper.toDto(clienteSaved);
+    }
+
+    @Override
+    public Page<ClienteDTO> pageClients(Pageable pageable) {
+
+        if (pageable.getPageSize() <= 0) {
+            throw new IllegalArgumentException("El tamaño no puede ser menor/igual a 0");
+        } else if (pageable.getPageNumber() < 0) {
+            throw new IllegalArgumentException("La página no puede ser menor a 0");
+        }
+        logger.info("Listado de paginación de clientes OK !");
+        return clienteRepository.findAll(pageable)
+                .map(ClienteMapper::toDto);
+    }
+
+    @Override
+    public byte[] exportExcelClientes() {
+
+        try {
+
+            List<ClienteEntity> clientes = clienteRepository.findAll();
+
+            Workbook workbook = new XSSFWorkbook();
+            Sheet sheet = workbook.createSheet("Lista de Clientes");
+
+            CellStyle headerStyle = createHeaderStyle(workbook);
+            CellStyle dataStyle = createDataStyle(workbook);
+
+            Row headerRow = sheet.createRow(0);
+            String[] columnas = {"Nombres", "Apellidos", "DNI", "Teléfono", "Distrito"};
+
+
+            for (int i = 0; i < columnas.length; i++) {
+                Cell cell = headerRow.createCell(i);
+                cell.setCellValue(columnas[i]);
+                cell.setCellStyle(headerStyle);
+            }
+
+            int rowNum = 1;
+            for (ClienteEntity clienteEntity : clientes) {
+                Row row = sheet.createRow(rowNum++);
+
+                Cell cell0 = row.createCell(0);
+                cell0.setCellValue(clienteEntity.getName());
+                cell0.setCellStyle(dataStyle);
+
+                Cell cell1 = row.createCell(1);
+                cell1.setCellValue(clienteEntity.getLastName());
+                cell1.setCellStyle(dataStyle);
+
+                Cell cell2 = row.createCell(2);
+                cell2.setCellValue(clienteEntity.getDni());
+                cell2.setCellStyle(dataStyle);
+
+                Cell cell3 = row.createCell(3);
+                cell3.setCellValue(clienteEntity.getTelephone());
+                cell3.setCellStyle(dataStyle);
+
+                Cell cell4 = row.createCell(4);
+                cell4.setCellValue(clienteEntity.getDistrict());
+                cell4.setCellStyle(dataStyle);
+
+                row.setHeightInPoints(25);
+            }
+
+            for (int i = 0; i < columnas.length; i++) {
+                sheet.autoSizeColumn(i);
+            }
+
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+            workbook.write(outputStream);
+            workbook.close();
+            logger.info("Excel de clientes generado correctamente");
+            return outputStream.toByteArray();
+
+        } catch (IOException e) {
+            logger.error("Hubo un error al generar el excel con la lista de clientes");
+            throw new ExportarExcelException("No se pudo exportar la lista de clientes en excel", e);
+        }
+    }
+
+    //Estilo para el header
+    private CellStyle createHeaderStyle(Workbook workbook) {
+
+        CellStyle style = workbook.createCellStyle();
+
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 11);
+        font.setColor(IndexedColors.WHITE.getIndex());
+        style.setFont(font);
+
+        XSSFCellStyle xssfCellStyle = (XSSFCellStyle) style;
+        XSSFColor customColor = new XSSFColor(new byte[]{41, (byte)128, (byte)185}, null);
+        xssfCellStyle.setFillForegroundColor(customColor);
+        xssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.GREY_40_PERCENT.getIndex());
+
+        return style;
+    }
+
+    //Estilo para la data
+    private CellStyle createDataStyle(Workbook workbook) {
+
+        CellStyle style = workbook.createCellStyle();
+
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 10);
+        font.setColor(IndexedColors.BLACK.getIndex());
+        style.setFont(font);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
+
+        return style;
+
+    }
+
 }
