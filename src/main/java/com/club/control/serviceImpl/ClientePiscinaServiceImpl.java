@@ -8,7 +8,13 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import com.lowagie.text.*;
+import com.lowagie.text.Font;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.xssf.usermodel.XSSFCellStyle;
+import org.apache.poi.xssf.usermodel.XSSFColor;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,13 +33,6 @@ import com.club.control.repository.ClientePiscinaRepository;
 import com.club.control.repository.ClienteRepository;
 import com.club.control.repository.MetodoPagoRepository;
 import com.club.control.service.ClientePiscinaService;
-import com.lowagie.text.Chunk;
-import com.lowagie.text.Document;
-import com.lowagie.text.Element;
-import com.lowagie.text.Font;
-import com.lowagie.text.PageSize;
-import com.lowagie.text.Paragraph;
-import com.lowagie.text.Phrase;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
@@ -317,8 +316,8 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 
 	private byte[] generarPdf(List<ClientePiscinaEntity> datos) {
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        Document document = new Document(PageSize.A4.rotate(), 30, 30, 30, 30);
 
-		Document document = new Document(PageSize.A4);
 		try {
 			PdfWriter.getInstance(document, baos);
 			document.open();
@@ -338,7 +337,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			// Título centrado que ocupa las dos columnas
 			PdfPCell header0 = new PdfPCell(new Paragraph("REPORTE DE SERVICIOS DE PISCINA", titleFont));
 			header0.setColspan(2); // Ocupa las dos columnas
-			header0.setBackgroundColor(new Color(63, 169, 219)); // 0, 102, 204 Azul oscuro
+			header0.setBackgroundColor(new Color(41, 128, 185)); // 0, 102, 204 Azul oscuro
 			header0.setHorizontalAlignment(Element.ALIGN_CENTER);
 			header0.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			header0.setPadding(15f);
@@ -358,57 +357,27 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			table.setWidthPercentage(100);
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
-			
-			PdfPCell header1 = new PdfPCell(new Phrase("Precio Unitario", headerFont));
-			header1.setBackgroundColor(new Color(63, 169, 219));
-			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header1);
-			
-			PdfPCell header2 = new PdfPCell(new Phrase("Personas", headerFont));
-			header2.setBackgroundColor(new Color(63, 169, 219));
-			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header2);
 
-			PdfPCell header3 = new PdfPCell(new Phrase("Cliente", headerFont));
-			header3.setBackgroundColor(new Color(63, 169, 219));
-			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header3);
-
-			PdfPCell header4 = new PdfPCell(new Phrase("DNI", headerFont));
-			header4.setBackgroundColor(new Color(63, 169, 219));
-			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header4);
-			
-			PdfPCell header5 = new PdfPCell(new Phrase("Teléfono", headerFont));
-			header5.setBackgroundColor(new Color(63, 169, 219));
-			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header5);
-
-			PdfPCell header6 = new PdfPCell(new Phrase("Fecha", headerFont));
-			header6.setBackgroundColor(new Color(63, 169, 219));
-			header6.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header6);
-
-			PdfPCell header7 = new PdfPCell(new Phrase("Método Pago", headerFont));
-			header7.setBackgroundColor(new Color(63, 169, 219));
-			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header7);
-
-			PdfPCell header8 = new PdfPCell(new Phrase("Total (S/)", headerFont));
-			header8.setBackgroundColor(new Color(63, 169, 219));
-			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header8);
+            // Headers
+            table.addCell(createHeaderCell("Precio Unitario", headerFont));
+            table.addCell(createHeaderCell("Personas", headerFont));
+            table.addCell(createHeaderCell("Cliente", headerFont));
+            table.addCell(createHeaderCell("DNI", headerFont));
+            table.addCell(createHeaderCell("Teléfono", headerFont));
+            table.addCell(createHeaderCell("Fecha", headerFont));
+            table.addCell(createHeaderCell("Método Pago", headerFont));
+            table.addCell(createHeaderCell("Total (S/)", headerFont));
 
 			// Datos
 			for (ClientePiscinaEntity entity : datos) {
-				table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getPrecioUnitario()), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getCantidadPersonas()), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getDni(), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getCliente().getTelephone(), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getFecha().toString(), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getMetodo().getName(), contentFont)));
-				table.addCell(new PdfPCell(new Phrase(entity.getMontoTotal().toString(), contentFont)));
+				table.addCell(createDataCell(String.valueOf(entity.getPrecioUnitario()), contentFont));
+				table.addCell(createDataCell(String.valueOf(entity.getCantidadPersonas()), contentFont));
+				table.addCell(createDataCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont));
+				table.addCell(createDataCell(entity.getCliente().getDni(), contentFont));
+				table.addCell(createDataCell(entity.getCliente().getTelephone(), contentFont));
+				table.addCell(createDataCell(entity.getFecha().toString(), contentFont));
+				table.addCell(createDataCell(entity.getMetodo().getName(), contentFont));
+				table.addCell(createDataCell(entity.getMontoTotal().toString(), contentFont));
 			}
 
 			document.add(table);
@@ -435,7 +404,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 		});
 
 		ByteArrayOutputStream baos = new ByteArrayOutputStream();
-		Document document = new Document(PageSize.A4);
+        Document document = new Document(PageSize.A4.rotate(), 30, 30, 30, 30);
 
 		try {
 
@@ -457,7 +426,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			// Título centrado que ocupa las dos columnas
 			PdfPCell header0 = new PdfPCell(new Paragraph("REPORTE DE SERVICIO DE PISCINA", titleFont));
 			header0.setColspan(2); // Ocupa las dos columnas
-			header0.setBackgroundColor(new Color(63, 169, 219)); // 0, 102, 204 Azul oscuro
+			header0.setBackgroundColor(new Color(41, 128, 185)); // 0, 102, 204 Azul oscuro
 			header0.setHorizontalAlignment(Element.ALIGN_CENTER);
 			header0.setVerticalAlignment(Element.ALIGN_MIDDLE);
 			header0.setPadding(15f);
@@ -481,55 +450,25 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			table.setSpacingBefore(10f);
 			table.setSpacingAfter(10f);
 
-			PdfPCell header1 = new PdfPCell(new Phrase("Precio Unitario", headerFont));
-			header1.setBackgroundColor(new Color(63, 169, 219));
-			header1.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header1);
-			
-			PdfPCell header2 = new PdfPCell(new Phrase("Personas", headerFont));
-			header2.setBackgroundColor(new Color(63, 169, 219));
-			header2.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header2);
-
-			PdfPCell header3 = new PdfPCell(new Phrase("Cliente", headerFont));
-			header3.setBackgroundColor(new Color(63, 169, 219));
-			header3.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header3);
-
-			PdfPCell header4 = new PdfPCell(new Phrase("DNI", headerFont));
-			header4.setBackgroundColor(new Color(63, 169, 219));
-			header4.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header4);
-			
-			PdfPCell header5 = new PdfPCell(new Phrase("Teléfono", headerFont));
-			header5.setBackgroundColor(new Color(63, 169, 219));
-			header5.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header5);
-
-			PdfPCell header6 = new PdfPCell(new Phrase("Fecha", headerFont));
-			header6.setBackgroundColor(new Color(63, 169, 219));
-			header6.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header6);
-
-			PdfPCell header7 = new PdfPCell(new Phrase("Método Pago", headerFont));
-			header7.setBackgroundColor(new Color(63, 169, 219));
-			header7.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header7);
-
-			PdfPCell header8 = new PdfPCell(new Phrase("Total (S/)", headerFont));
-			header8.setBackgroundColor(new Color(63, 169, 219));
-			header8.setHorizontalAlignment(Element.ALIGN_CENTER);
-			table.addCell(header8);
+            // Headers
+            table.addCell(createHeaderCell("Precio Unitario", headerFont));
+            table.addCell(createHeaderCell("Personas", headerFont));
+            table.addCell(createHeaderCell("Cliente", headerFont));
+            table.addCell(createHeaderCell("DNI", headerFont));
+            table.addCell(createHeaderCell("Teléfono", headerFont));
+            table.addCell(createHeaderCell("Fecha", headerFont));
+            table.addCell(createHeaderCell("Método Pago", headerFont));
+            table.addCell(createHeaderCell("Total (S/)", headerFont));
 
 			// Datos del servicio de piscina requerido
-			table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getPrecioUnitario()), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(String.valueOf(entity.getCantidadPersonas()), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getDni(), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getCliente().getTelephone(), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getFecha().toString(), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getMetodo().getName(), contentFont)));
-			table.addCell(new PdfPCell(new Phrase(entity.getMontoTotal().toString(), contentFont)));
+			table.addCell(createDataCell(String.valueOf(entity.getPrecioUnitario()), contentFont));
+			table.addCell(createDataCell(String.valueOf(entity.getCantidadPersonas()), contentFont));
+			table.addCell(createDataCell(entity.getCliente().getName() + " " + entity.getCliente().getLastName(), contentFont));
+			table.addCell(createDataCell(entity.getCliente().getDni(), contentFont));
+			table.addCell(createDataCell(entity.getCliente().getTelephone(), contentFont));
+			table.addCell(createDataCell(entity.getFecha().toString(), contentFont));
+			table.addCell(createDataCell(entity.getMetodo().getName(), contentFont));
+			table.addCell(createDataCell(entity.getMontoTotal().toString(), contentFont));
 
 			document.add(table);
 			document.add(Chunk.NEWLINE);
@@ -543,6 +482,31 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 		logger.info("PDF generado Exitosamente del servicio de piscina con el id: {}", id);
 		return baos.toByteArray();
 	}
+
+    // Metodo helper para el header PDF
+    private PdfPCell createHeaderCell(String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Paragraph(text, font));
+        cell.setBackgroundColor(new Color(41, 128, 185));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_CENTER);
+        cell.setPadding(10f);
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setBorderWidthBottom(1f);
+        cell.setBorderColorBottom(new Color(200, 200, 200));
+        return cell;
+    }
+
+    // Metodo helper para los datos PDF
+    private PdfPCell createDataCell(String text, Font font) {
+        PdfPCell cell = new PdfPCell(new Paragraph(text != null ? text : "", font));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        cell.setVerticalAlignment(Element.ALIGN_MIDDLE);
+        cell.setPadding(10f);
+        cell.setBorder(Rectangle.NO_BORDER);
+        cell.setBorderWidthBottom(0.5f);
+        cell.setBorderColorBottom(new Color(220, 220, 220));
+        return cell;
+    }
 
 	@Override
 	public byte[] exportarExcelFiltradoClientePiscina(String dni, String nombreMetodoPago, LocalDate fecha, LocalDate desde,
@@ -558,6 +522,9 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 		try {
 			Workbook workbook = new XSSFWorkbook();
 			Sheet sheet = workbook.createSheet("Lista de Servicio de Piscina");
+
+            CellStyle headerStyle = createHeaderStyle(workbook);
+            CellStyle dataStyle = createDataStyle(workbook);
 			
 			Row headerRow = sheet.createRow(0);
 			String [] columnas = {"Precio Unitario", "Personas", "Cliente", "DNI", "Teléfono", "Fecha", "Método de Pago", "Monto Total"};
@@ -566,7 +533,7 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			for (int i = 0; i < columnas.length; i++) {
 				Cell cell = headerRow.createCell(i);
 				cell.setCellValue(columnas[i]);
-				cell.setCellStyle(crearEstiloEncabezado(workbook));
+				cell.setCellStyle(headerStyle);
 			}
 			
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -574,14 +541,41 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			int rowNum = 1;
 			for(ClientePiscinaEntity entity: datos) {
 				Row row = sheet.createRow(rowNum++);
-				row.createCell(0).setCellValue(entity.getPrecioUnitario());
-				row.createCell(1).setCellValue(entity.getCantidadPersonas());
-				row.createCell(2).setCellValue(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
-				row.createCell(3).setCellValue(entity.getCliente().getDni());
-				row.createCell(4).setCellValue(entity.getCliente().getTelephone());
-				row.createCell(5).setCellValue(entity.getFecha().format(formatter));
-				row.createCell(6).setCellValue(entity.getMetodo().getName());
-				row.createCell(7).setCellValue(String.valueOf(entity.getMontoTotal()));
+
+                Cell cell0 = row.createCell(0);
+                cell0.setCellValue(entity.getPrecioUnitario());
+                cell0.setCellStyle(dataStyle);
+
+                Cell cell1 = row.createCell(1);
+                cell1.setCellValue(entity.getCantidadPersonas());
+                cell1.setCellStyle(dataStyle);
+
+                Cell cell2 = row.createCell(2);
+                cell2.setCellValue(entity.getCliente().getName() + " " + entity.getCliente().getLastName());
+                cell2.setCellStyle(dataStyle);
+
+                Cell cell3 = row.createCell(3);
+                cell3.setCellValue(entity.getCliente().getDni());
+                cell3.setCellStyle(dataStyle);
+
+                Cell cell4 = row.createCell(4);
+                cell4.setCellValue(entity.getCliente().getTelephone());
+                cell4.setCellStyle(dataStyle);
+
+                Cell cell5 = row.createCell(5);
+                cell5.setCellValue(entity.getFecha().format(formatter));
+                cell5.setCellStyle(dataStyle);
+
+                Cell cell6 = row.createCell(6);
+                cell6.setCellValue(entity.getMetodo().getName());
+                cell6.setCellStyle(dataStyle);
+
+                Cell cell7 = row.createCell(7);
+                cell7.setCellValue(String.valueOf(entity.getMontoTotal()));
+                cell7.setCellStyle(dataStyle);
+
+                row.setHeightInPoints(25);
+
 			}
 			
 			for (int i = 0; i < columnas.length; i++) {
@@ -600,12 +594,48 @@ public class ClientePiscinaServiceImpl implements ClientePiscinaService {
 			throw new ExportarExcelException("No se pudo exportar el excel de servicios de piscina", e);
 		}
 	}
-	
-	private CellStyle crearEstiloEncabezado(Workbook workbook) {
-		CellStyle estilo = workbook.createCellStyle();
-		org.apache.poi.ss.usermodel.Font font = workbook.createFont();
-		font.setBold(true);
-		estilo.setFont(font);
-		return estilo;
-	}
+
+    //Estilo para el header
+    private CellStyle createHeaderStyle(Workbook workbook) {
+
+        CellStyle style = workbook.createCellStyle();
+
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 11);
+        font.setColor(IndexedColors.WHITE.getIndex());
+        style.setFont(font);
+
+        XSSFCellStyle xssfCellStyle = (XSSFCellStyle) style;
+        XSSFColor customColor = new XSSFColor(new byte[]{41, (byte)128, (byte)185}, null);
+        xssfCellStyle.setFillForegroundColor(customColor);
+        xssfCellStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.GREY_40_PERCENT.getIndex());
+
+        return style;
+    }
+
+    private CellStyle createDataStyle(Workbook workbook) {
+
+        CellStyle style = workbook.createCellStyle();
+
+        org.apache.poi.ss.usermodel.Font font = workbook.createFont();
+        font.setFontHeightInPoints((short) 10);
+        font.setColor(IndexedColors.BLACK.getIndex());
+        style.setFont(font);
+
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        style.setBorderBottom(BorderStyle.THIN);
+        style.setBottomBorderColor(IndexedColors.GREY_25_PERCENT.getIndex());
+
+        return style;
+
+    }
 }
